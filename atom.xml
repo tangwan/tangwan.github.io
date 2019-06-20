@@ -2,11 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tangwan.github.io</id>
     <title>Devin&apos;s Blog</title>
-    <updated>2019-06-20T06:53:13.432Z</updated>
+    <updated>2019-06-20T06:57:29.117Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tangwan.github.io"/>
     <link rel="self" href="https://tangwan.github.io/atom.xml"/>
-    <subtitle>博采众长才能相互印证,固步自封必将粗陋浅薄</subtitle>
+    <subtitle>博采众长才能相互印证,固步自封必将粗陋浅薄!</subtitle>
     <logo>https://tangwan.github.io/images/avatar.png</logo>
     <icon>https://tangwan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Devin&apos;s Blog</rights>
