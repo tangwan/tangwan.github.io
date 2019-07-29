@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tangwan.github.io</id>
     <title>Devin&apos;s Blog</title>
-    <updated>2019-07-29T09:31:59.656Z</updated>
+    <updated>2019-07-29T09:41:00.098Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tangwan.github.io"/>
     <link rel="self" href="https://tangwan.github.io/atom.xml"/>
@@ -16,7 +16,11 @@
         <link href="https://tangwan.github.io/post/mazurs-sql-style-guide">
         </link>
         <updated>2019-07-29T09:27:06.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="mazurs-sql-style-guide">Mazur's SQL Style Guide</h1>
+        <summary type="html"><![CDATA[<p>Howdy! I'm <a href="https://mattmazur.com/">Matt Mazur</a> and I'm a data analyst who has worked at several startups to help them use data to grow their businesses. This guide is an attempt to document my preferences for formatting SQL in the hope that it may be of some use to others. If you or your team do not already have a SQL style guide, this may serve as a good starting point which you can adopt and update based on your preferences.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Howdy! I'm <a href="https://mattmazur.com/">Matt Mazur</a> and I'm a data analyst who has worked at several startups to help them use data to grow their businesses. This guide is an attempt to document my preferences for formatting SQL in the hope that it may be of some use to others. If you or your team do not already have a SQL style guide, this may serve as a good starting point which you can adopt and update based on your preferences.</p>
+<!-- more -->
+<h1 id="mazurs-sql-style-guide">Mazur's SQL Style Guide</h1>
 <p>Howdy! I'm <a href="https://mattmazur.com/">Matt Mazur</a> and I'm a data analyst who has worked at several startups to help them use data to grow their businesses. This guide is an attempt to document my preferences for formatting SQL in the hope that it may be of some use to others. If you or your team do not already have a SQL style guide, this may serve as a good starting point which you can adopt and update based on your preferences.</p>
 <p>Also, I'm a strong believer in having <a href="https://medium.com/@ameet/strong-opinions-weakly-held-a-framework-for-thinking-6530d417e364">Strong Opinions, Weakly Held</a> so if you disagree with any of this, <a href="https://mattmazur.com/contact/">drop me a note</a>, I'd love to discuss it.</p>
 <p>If you're interested in this topic, you may also enjoy my <a href="http://eepurl.com/dITJS9">Matt On Analytics</a> newsletter and <a href="https://mattmazur.com/category/analytics/">my blog</a> where I write about analytics and data analysis.</p>
@@ -544,12 +548,12 @@ from billingdaddy.billing_stored_details
         <link href="https://tangwan.github.io/post/ce-shi">
         </link>
         <updated>2019-06-20T06:37:09.000Z</updated>
-        <summary type="html"><![CDATA[<p>瞎搞
-瞎搞
+        <summary type="html"><![CDATA[<p>瞎搞<br>
+瞎搞<br>
 瞎搞</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p>瞎搞
-瞎搞
+        <content type="html"><![CDATA[<p>瞎搞<br>
+瞎搞<br>
 瞎搞</p>
 <!-- more -->
 <h1 id="测试">测试</h1>
