@@ -1,22 +1,146 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://tangwan.github.io</id>
-    <title>Devin&apos;s Blog</title>
-    <updated>2019-07-29T09:31:59.656Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://tangwan.github.io"/>
-    <link rel="self" href="https://tangwan.github.io/atom.xml"/>
-    <subtitle>博采众长才能相互印证,固步自封必将粗陋浅薄!</subtitle>
-    <logo>https://tangwan.github.io/images/avatar.png</logo>
-    <icon>https://tangwan.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2019, Devin&apos;s Blog</rights>
-    <entry>
-        <title type="html"><![CDATA[Mazur's SQL Style Guide]]></title>
-        <id>https://tangwan.github.io/post/mazurs-sql-style-guide</id>
-        <link href="https://tangwan.github.io/post/mazurs-sql-style-guide">
-        </link>
-        <updated>2019-07-29T09:27:06.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="mazurs-sql-style-guide">Mazur's SQL Style Guide</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Mazur&#39;s SQL Style Guide | Devin&#39;s Blog</title>
+<meta name="description" content="博采众长才能相互印证,固步自封必将粗陋浅薄!">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1564392690306">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131285531-1');
+</script>
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://tangwan.github.io">
+        <img src="https://tangwan.github.io/images/avatar.png?v=1564392690306" class="site-logo">
+        <h1 class="site-title">Devin&#39;s Blog</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="https://support.qq.com/product/65062" class="site-nav" target="_blank">
+            吐槽
+          </a>
+        
+      
+        
+          <a href="/post/about/" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/tangwan" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://twitter.com/tw_czh" target="_blank">
+            <i class="fab fa-twitter"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://weibo.com/twczh" target="_blank">
+            <i class="fab fa-weibo"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://www.zhihu.com/people/devintowne/activities" target="_blank">
+            <i class="fab fa-zhihu"></i>
+          </a>
+        
+      
+        
+          <a class="social-link" href="https://www.facebook.com/tangwan1114" target="_blank">
+            <i class="fab fa-facebook"></i>
+          </a>
+        
+      
+    </div>
+    <div class="site-description">
+      博采众长才能相互印证,固步自封必将粗陋浅薄!
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Mazur&#39;s SQL Style Guide</h2>
+            <div class="post-date">2019-07-29</div>
+            
+              <div class="feature-container" style="background-image: url('https://files.ppznet.com/devTools/images/20190729173036.jpg')">
+              </div>
+            
+            <div class="post-content">
+              <h1 id="mazurs-sql-style-guide">Mazur's SQL Style Guide</h1>
 <p>Howdy! I'm <a href="https://mattmazur.com/">Matt Mazur</a> and I'm a data analyst who has worked at several startups to help them use data to grow their businesses. This guide is an attempt to document my preferences for formatting SQL in the hope that it may be of some use to others. If you or your team do not already have a SQL style guide, this may serve as a good starting point which you can adopt and update based on your preferences.</p>
 <p>Also, I'm a strong believer in having <a href="https://medium.com/@ameet/strong-opinions-weakly-held-a-framework-for-thinking-6530d417e364">Strong Opinions, Weakly Held</a> so if you disagree with any of this, <a href="https://mattmazur.com/contact/">drop me a note</a>, I'd love to discuss it.</p>
 <p>If you're interested in this topic, you may also enjoy my <a href="http://eepurl.com/dITJS9">Matt On Analytics</a> newsletter and <a href="https://mattmazur.com/category/analytics/">my blog</a> where I write about analytics and data analysis.</p>
@@ -536,61 +660,76 @@ from billingdaddy.billing_stored_details
 <li><a href="https://about.gitlab.com/handbook/business-ops/data-team/sql-style-guide/">GitLab's SQL Style Guide</a></li>
 </ul>
 <p>Hat-tip to Peter Butler, Dan Wyman, Simon Ouderkirk, Alex Cano, Adam Stone, Brian Kim, and Claire Carroll for providing feedback on this guide.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[测试]]></title>
-        <id>https://tangwan.github.io/post/ce-shi</id>
-        <link href="https://tangwan.github.io/post/ce-shi">
-        </link>
-        <updated>2019-06-20T06:37:09.000Z</updated>
-        <summary type="html"><![CDATA[<p>瞎搞
-瞎搞
-瞎搞</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>瞎搞
-瞎搞
-瞎搞</p>
-<!-- more -->
-<h1 id="测试">测试</h1>
-<h2 id="测试-2">测试</h2>
-<h3 id="测试-3">测试</h3>
-<ul>
-<li>hello world</li>
-</ul>
-<p><img src="https://tangwan.github.io/post-images/1561602912948.png" alt=""></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://tangwan.github.io/post/hello-gridea</id>
-        <link href="https://tangwan.github.io/post/hello-gridea">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="http://hvenotes.fehey.com/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>𝖶𝗂𝗇𝖽𝗈𝗐𝗌</strong> 或 <strong>𝖬𝖺𝖼𝖮𝖲</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
-]]></content>
-    </entry>
-</feed>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://tangwan.github.io/post/ce-shi">
+                  <h3 class="post-title">
+                    测试
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '92302bd3179ddd188189',
+        clientSecret: 'e38f7bd35272f55e4b44d82fd7fc34f9a89b4c3f',
+        repo: 'tangwan.github.io',
+        owner: 'tangwan',
+        admin: ['tangwan'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
