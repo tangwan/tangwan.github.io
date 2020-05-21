@@ -1,160 +1,114 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
+  <head>
+    <meta charset="utf-8" >
 
-<head>
-  <meta charset="UTF-8" />
-<title>Mazur&#39;s SQL Style Guide - Devin&#39;s Blog</title>
+<title>Mazur&#39;s SQL Style Guide | Devin&#39;s Blog</title>
 <meta name="description" content="博采众长才能相互印证,固步自封必将粗陋浅薄!">
+
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1590048583633">
 
-<link type='text/css' rel='stylesheet' href='https://tangwan.github.io/styles/main.css' media='screen' />
-<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/KaTeX/0.11.1/katex.min.css">
-<link type="text/css" rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-<script type="text/javascript" src='https://tangwan.github.io/media/scripts/jquery.js'></script>
-<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
-
-<script>
-    hljs.initHighlightingOnLoad();
-</script>
-</head>
-
-<body>
-  <div class="layout theme-dark">
-    <div class="layout-header">
-
-	<div class="layout-header-main">
-		<div class="container">
-			<div class="row justify-content-lg-center">
-				<div class="col-12 col-lg-9">
-
-					<div class="navbar">
-
-						<div class="logo">
-							<a href="https://tangwan.github.io">
-								<img class="logo"
-									src="https://tangwan.github.io/media/images/site_avatar.png?v=1590048337567"
-									alt="">
-							</a>
-						</div>
-
-						<div class="menu d-md-inline-block d-none">
-							<ul class="layout-navigation-list">
-								
-								<li class="layout-navigation-item"><a title="首页"
-										href="/">首页</a>
-								</li>
-								
-								<li class="layout-navigation-item"><a title="归档"
-										href="/archives">归档</a>
-								</li>
-								
-								<li class="layout-navigation-item"><a title="标签"
-										href="/tags">标签</a>
-								</li>
-								
-								<li class="layout-navigation-item"><a title="吐槽"
-										href="https://support.qq.com/product/65062">吐槽</a>
-								</li>
-								
-								<li class="layout-navigation-item"><a title="关于"
-										href="/post/about/">关于</a>
-								</li>
-								
-							</ul>
-						</div>
-
-						<div class="item d-md-inline-block d-none">
-							<div class="search-icon">
-								<i class="fa fa-search" aria-hidden="true"></i>
-							</div>
-						</div>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
 
 
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
 
-						<div class="d-md-inline-block d-none">
-							<div class="search-lightbox">
-								<div class="search-body">
+  
 
-									<form id="gridea-search-form" data-update="1590048337567" action="/search/" class="search-form">
-										<input type="text" name="q" id="s" value="" class="search-field" placeholder="请输入搜索关键词" aria-label="请输入搜索关键词" required="">
-										<button type="submit" class="submit" aria-label="Submit">
-											<i class="fa fa-search" aria-hidden="true"></i>
-										</button>
-									</form>
-
-								</div>
-							</div>
-						</div>
-
-						<div class="nav d-md-none d-inline-block">
-							<div class="trigger">
-								<i class="fa fa-bars layout-btn-toggle" aria-hidden="true"></i>
-							</div>
-						</div>
-
-					</div>
-
-				</div>
-			</div>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
 
 
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
 
-		</div>
-	</div>
+  </head>
+  <body>
+  
+    <nav class="navbar border fixed split-nav">
+  <div class="nav-brand">
+    <h3><a href="https://tangwan.github.io">Devin&#39;s Blog</a></h3>
+  </div>
+  <div class="collapsible">
+    <input id="collapsible1" type="checkbox" name="collapsible1">
+    <button>
+      <label for="collapsible1">
+        <div class="bar1"></div>
+        <div class="bar2"></div>
+        <div class="bar3"></div>
+      </label>
+    </button>
+    <div class="collapsible-body">
+      <ul class="inline">
+        
+          <li>
+            
+              <a href="/" class="menu">
+                首页
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/archives" class="menu">
+                归档
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/tags" class="menu">
+                标签
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="https://support.qq.com/product/65062" class="menu" target="_blank">
+                吐槽
+              </a>
+            
+          </li>
+        
+          <li>
+            
+              <a href="/post/about/" class="menu">
+                关于
+              </a>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
 
-</div>
-    <div class="layout-collapse d-md-none">
-	<div class="layout-collapse-main">
-		<ul class="layout-collapse-list">
-			
-			<li class="layout-collapse-item"><a title="首页" href="/">首页</a></li>
-			
-			<li class="layout-collapse-item"><a title="归档" href="/archives">归档</a></li>
-			
-			<li class="layout-collapse-item"><a title="标签" href="/tags">标签</a></li>
-			
-			<li class="layout-collapse-item"><a title="吐槽" href="https://support.qq.com/product/65062">吐槽</a></li>
-			
-			<li class="layout-collapse-item"><a title="关于" href="/post/about/">关于</a></li>
-			
-
-		</ul>
-	</div>
-</div>
-
-    <div class="layout-content">
-      <div class="layout-content-main">
-        <div class="container">
-          <div class="row justify-content-lg-center">
-            <div class="col-12 col-lg-9">
-              <div class="layout-post">
-                <div class="layout-post-body">
-                  <div class="row">
-
-                    <div class="col-12 col-lg-10">
-                      <div class="layout-post-main m-right m-md-right">
-                        <div class="layout-post-header">
-                          <h1 class="layout-post-title">Mazur&#39;s SQL Style Guide</h1>
-                          <div class="layout-post-meta">
-                            <div class="item">
-                               <a href="https://tangwan.github.io/tag/CBFPFmDLC/" class="post--keyword"
-                                data-title="sql" data-type="post_tag" data-term-id="39">sql</a>
-                              
-                            </div>
-                            <div class="item">
-                              <span>2019-07-29</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="layout-post-content">
-                          <div class="layout-post-item">
-                            
-                            <p class="with-img"><img src="https://files.ppznet.com/devTools/images/20190729173036.jpg"
-                                class="attachment-full size-full wp-post-image" alt="Mazur&#39;s SQL Style Guide" /></p>
-                            
-                            <p>Howdy! I'm <a href="https://mattmazur.com/">Matt Mazur</a> and I'm a data analyst who has worked at several startups to help them use data to grow their businesses. This guide is an attempt to document my preferences for formatting SQL in the hope that it may be of some use to others. If you or your team do not already have a SQL style guide, this may serve as a good starting point which you can adopt and update based on your preferences.</p>
+    <div id="top" class="row site">
+      <div class="sm-12 md-8 col">
+        <div class="paper">
+          <article class="article">
+            <h1>Mazur&#39;s SQL Style Guide</h1>
+            <p class="article-meta">
+              2019-07-29
+              
+                <a href="https://tangwan.github.io/tag/CBFPFmDLC/" class="badge secondary">
+                  sql
+                </a>
+              
+            </p>
+            
+              <img src="https://files.ppznet.com/devTools/images/20190729173036.jpg" alt="Mazur&#39;s SQL Style Guide">
+            
+            <div class="post-content">
+              <p>Howdy! I'm <a href="https://mattmazur.com/">Matt Mazur</a> and I'm a data analyst who has worked at several startups to help them use data to grow their businesses. This guide is an attempt to document my preferences for formatting SQL in the hope that it may be of some use to others. If you or your team do not already have a SQL style guide, this may serve as a good starting point which you can adopt and update based on your preferences.</p>
 <!-- more -->
 <h1 id="mazurs-sql-style-guide">Mazur's SQL Style Guide</h1>
 <p>Howdy! I'm <a href="https://mattmazur.com/">Matt Mazur</a> and I'm a data analyst who has worked at several startups to help them use data to grow their businesses. This guide is an attempt to document my preferences for formatting SQL in the hope that it may be of some use to others. If you or your team do not already have a SQL style guide, this may serve as a good starting point which you can adopt and update based on your preferences.</p>
@@ -677,169 +631,165 @@ from billingdaddy.billing_stored_details
 </ul>
 <p>Hat-tip to Peter Butler, Dan Wyman, Simon Ouderkirk, Alex Cano, Adam Stone, Brian Kim, and Claire Carroll for providing feedback on this guide.</p>
 
-                          </div>
-                        </div>
-                        <div class="layout-post-social">
-                          <div class="item reader">
-                            <div id="/post/mazurs-sql-style-guide/" class="leancloud-visitors view"
-                              data-flag-title="Mazur&#39;s SQL Style Guide">
-                              <span class="post-meta-item-text">阅读 </span>
-                              <span class="leancloud-visitors-count"></span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="layout-post-navigation">
-                          <div class="navigation-list">
-                            
-                            <div class="post-card row">
-                              
-                              <div class="card-content col-8 col-md-9">
-                                <div class="card-body">
-                                  <div class="header">
-                                    <a href="https://tangwan.github.io/post/ce-shi/" class="title">
-                                      <h4>测试</h4>
-                                    </a>
-                                  </div>
-                                  <div class="inner d-none d-sm-block">
-                                    <div class="abstract">
-                                      <p>瞎搞<br>
-瞎搞<br>
-瞎搞</p>
-
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-footer">
-                                  <div class="item"><span>下一篇</span></div>
-                                  <div class="item">2019-06-20</div>
-                                </div>
-                              </div>
-                              <div class="card-thumb col-4 col-md-3">
-                                <div class="thumb">
-                                  <a href="https://tangwan.github.io/post/ce-shi/"
-                                    style="background-image: url('https://tangwan.github.io/post-images/ce-shi.png');"></a>
-                                </div>
-                              </div>
-                              
-                            </div>
-                            
-                          </div>
-                        </div>
-
-                        <div class="layout-comments"></div>
-                        
-                      </div>
-                    </div>
-
-                    <div class="col-12 col-lg-2 d-none d-lg-block">
-                      <div class="layout-post-sidebar">
-                        <div class="layout-sidebar-item">
-                          <ul class="markdownIt-TOC">
-<li><a href="#mazurs-sql-style-guide">Mazur's SQL Style Guide</a>
-<ul>
-<li><a href="#example">Example</a></li>
-<li><a href="#guidelines">Guidelines</a>
-<ul>
-<li><a href="#use-lowercase-sql">Use lowercase SQL</a></li>
-<li><a href="#single-line-vs-multiple-line-queries">Single line vs multiple line queries</a></li>
-<li><a href="#left-align-everything">Left align everything</a></li>
-<li><a href="#use-single-quotes">Use single quotes</a></li>
-<li><a href="#use-over">Use <code>!=</code> over <code>&lt;&gt;</code></a></li>
-<li><a href="#commas-should-be-at-the-the-end-of-lines">Commas should be at the the end of lines</a></li>
-<li><a href="#indenting-where-conditions">Indenting where conditions</a></li>
-<li><a href="#avoid-spaces-inside-of-parenthesis">Avoid spaces inside of parenthesis</a></li>
-<li><a href="#break-long-lists-of-in-values-into-multiple-indented-lines">Break long lists of <code>in</code> values into multiple indented lines</a></li>
-<li><a href="#table-names-should-be-a-plural-snake-case-of-the-noun">Table names should be a plural snake case of the noun</a></li>
-<li><a href="#column-names-should-be-snake_case">Column names should be snake_case</a></li>
-<li><a href="#column-name-conventions">Column name conventions</a></li>
-<li><a href="#column-order-conventions">Column order conventions</a></li>
-<li><a href="#include-inner-for-inner-joins">Include <code>inner</code> for inner joins</a></li>
-<li><a href="#for-join-conditions-put-the-table-that-was-referenced-first-immediately-after-the-on">For join conditions, put the table that was referenced first immediately after the <code>on</code></a></li>
-<li><a href="#single-join-conditions-should-be-on-the-same-line-as-the-join">Single join conditions should be on the same line as the join</a></li>
-<li><a href="#avoid-aliasing-tables">Avoid aliasing tables</a></li>
-<li><a href="#dont-include-table-names-unless-you-have-to">Don't include table names unless you have to</a></li>
-<li><a href="#always-rename-aggregates-and-function-wrapped-arguments">Always rename aggregates and function-wrapped arguments</a></li>
-<li><a href="#be-explicit-in-boolean-conditions">Be explicit in boolean conditions</a></li>
-<li><a href="#use-as-to-alias-column-names">Use <code>as</code> to alias column names</a></li>
-<li><a href="#group-by-column-name-not-number">Group by column name, not number</a></li>
-<li><a href="#take-advantage-of-lateral-column-aliasing">Take advantage of lateral column aliasing</a></li>
-<li><a href="#grouping-columns-should-go-first">Grouping columns should go first</a></li>
-<li><a href="#aligning-casewhen-statements">Aligning case/when statements</a></li>
-<li><a href="#use-ctes-not-subqueries">Use CTEs, not subqueries</a></li>
-<li><a href="#use-meaningful-cte-names">Use meaningful CTE names</a></li>
-<li><a href="#window-functions">Window functions</a></li>
-</ul>
-</li>
-<li><a href="#credits">Credits</a></li>
-</ul>
-</li>
-</ul>
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
+          </article>
         </div>
+        <div class="paper" data-aos="fade-in">
+          
+            <div class="next-post">
+              <div class="next">
+                下一篇
+              </div>
+              <a href="https://tangwan.github.io/post/ce-shi/">
+                <h3 class="post-title">
+                  测试
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+        
+          
+            <div class="paper" data-aos="fade-in">
+              <div id="gitalk-container"></div>
+            </div>
+          
+
+          
+        
       </div>
+
+      <div class="sm-12 md-4 col sidebar">
+  <div class="paper info-container">
+    <img src="https://tangwan.github.io/images/avatar.png?v=1590048583633" class="no-responsive avatar">
+    <div class="text-muted">博采众长才能相互印证,固步自封必将粗陋浅薄!</div>
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      最新文章
+    </div>
+    <div class="row">
+      <ul>
+        
+          
+            <li>
+              <a href="https://tangwan.github.io/post/mazurs-sql-style-guide/">Mazur&#39;s SQL Style Guide</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://tangwan.github.io/post/ce-shi/">测试</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://tangwan.github.io/post/about/">关于</a>
+            </li>
+          
+        
+          
+            <li>
+              <a href="https://tangwan.github.io/post/hello-gridea/">Hello Gridea</a>
+            </li>
+          
+        
+      </ul>
+    </div>
+  </div>
+  <div class="paper">
+    <div class="sidebar-title">
+      标签列表
+    </div>
+    <div class="row">
+      
+        <a href="https://tangwan.github.io/tag/CBFPFmDLC/" class="badge ">
+          sql
+        </a>
+      
+        <a href="https://tangwan.github.io/tag/J9-E5qTak/" class="badge success">
+          springboot
+        </a>
+      
+        <a href="https://tangwan.github.io/tag/kL3KLiI0b/" class="badge ">
+          springcloud
+        </a>
+      
+        <a href="https://tangwan.github.io/tag/3tG3u9ueg/" class="badge secondary">
+          hadoop
+        </a>
+      
+        <a href="https://tangwan.github.io/tag/tXmh4BxIi/" class="badge secondary">
+          spark
+        </a>
+      
+        <a href="https://tangwan.github.io/tag/axORlLhHE/" class="badge warning">
+          java
+        </a>
+      
+        <a href="https://tangwan.github.io/tag/gridea/" class="badge secondary">
+          Gridea
+        </a>
+      
+    </div>
+  </div>
+  <div class="paper">
+    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+
+
     </div>
 
-    <div class="layout-totop d-none"><i class="fa fa-angle-up" aria-hidden="true"></i></div>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
 
-    	<div class="layout-footer">
+<script type="application/javascript">
 
-		<div class="container">
-			<div class="row justify-content-lg-center">
-				<div class="col-12 col-lg-9">
-					<div class="footer">
-						<div class="row">
-							<div class="col-12 col-md-9">
-								<div class="footer-copy">
-									
-									Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-									<div class="footer-icp d-none d-sm-inline-block">
-										<span class="px-2">⋅</span>
-										
-									</div>
-								</div>
-							</div>
-							<div class="col-sm-3 d-none d-md-block">
-								<div class="footer-links">
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+AOS.init();
 
-	</div>
+hljs.initHighlightingOnLoad()
 
-	<script type="text/javascript" src='https://tangwan.github.io/media/scripts/main.js'></script>
-	
+</script>
 
-  </div>
-</body>
 
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '92302bd3179ddd188189',
+        clientSecret: 'e38f7bd35272f55e4b44d82fd7fc34f9a89b4c3f',
+        repo: 'tangwan.github.io',
+        owner: 'tangwan',
+        admin: ['tangwan'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
 </html>
