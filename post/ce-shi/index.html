@@ -1,134 +1,134 @@
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" >
-
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>测试 | Devin&#39;s Blog</title>
-<meta name="description" content="博采众长才能相互印证,固步自封必将粗陋浅薄!">
-
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1592814608217">
-
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/papercss@1.6.1/dist/paper.min.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1592983948862">
+<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
 
 
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
 
-  
-
-<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
-
-
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-
-  </head>
-  <body>
-  
-    <nav class="navbar border fixed split-nav">
-  <div class="nav-brand">
-    <h3><a href="https://tangwan.github.io">Devin&#39;s Blog</a></h3>
-  </div>
-  <div class="collapsible">
-    <input id="collapsible1" type="checkbox" name="collapsible1">
-    <button>
-      <label for="collapsible1">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </label>
-    </button>
-    <div class="collapsible-body">
-      <ul class="inline">
-        
-          <li>
-            
-              <a href="/" class="menu">
-                首页
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/archives" class="menu">
-                归档
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/tags" class="menu">
-                标签
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="https://support.qq.com/product/65062" class="menu" target="_blank">
-                吐槽
-              </a>
-            
-          </li>
-        
-          <li>
-            
-              <a href="/post/about/" class="menu">
-                关于
-              </a>
-            
-          </li>
-        
-      </ul>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
     </div>
-  </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                            吐槽
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about/" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+    </div>
 </nav>
-
-    <div id="top" class="row site">
-      <div class="sm-12 md-8 col">
-        <div class="paper">
-          <article class="article">
-            <h1>测试</h1>
-            <p class="article-meta">
-              2019-06-20
-              
-                <a href="https://tangwan.github.io/tag/J9-E5qTak/" class="badge ">
-                  springboot
-                </a>
-              
-                <a href="https://tangwan.github.io/tag/kL3KLiI0b/" class="badge warning">
-                  springcloud
-                </a>
-              
-                <a href="https://tangwan.github.io/tag/3tG3u9ueg/" class="badge warning">
-                  hadoop
-                </a>
-              
-                <a href="https://tangwan.github.io/tag/tXmh4BxIi/" class="badge warning">
-                  spark
-                </a>
-              
-                <a href="https://tangwan.github.io/tag/axORlLhHE/" class="badge ">
-                  java
-                </a>
-              
-                <a href="https://tangwan.github.io/tag/gridea/" class="badge ">
-                  Gridea
-                </a>
-              
-            </p>
-            
-              <img src="https://tangwan.github.io/post-images/ce-shi.png" alt="测试">
-            
-            <div class="post-content">
-              <p>瞎搞<br>
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    测试
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2019-06-20 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/J9-E5qTak/" class="post-tags">
+                            # springboot
+                        </a>
+                    
+                        <a href="https://tangwan.github.io/tag/kL3KLiI0b/" class="post-tags">
+                            # springcloud
+                        </a>
+                    
+                        <a href="https://tangwan.github.io/tag/3tG3u9ueg/" class="post-tags">
+                            # hadoop
+                        </a>
+                    
+                        <a href="https://tangwan.github.io/tag/tXmh4BxIi/" class="post-tags">
+                            # spark
+                        </a>
+                    
+                        <a href="https://tangwan.github.io/tag/axORlLhHE/" class="post-tags">
+                            # java
+                        </a>
+                    
+                        <a href="https://tangwan.github.io/tag/gridea/" class="post-tags">
+                            # Gridea
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>瞎搞<br>
 瞎搞<br>
 瞎搞</p>
 <!-- more -->
@@ -140,171 +140,82 @@
 </ul>
 <figure data-type="image" tabindex="1"><img src="https://tangwan.github.io/post-images/1561602912948.png" alt="" loading="lazy"></figure>
 
-            </div>
-          </article>
+                </div>
+            </article>
         </div>
-        <div class="paper" data-aos="fade-in">
-          
+
+        
             <div class="next-post">
-              <div class="next">
-                下一篇
-              </div>
-              <a href="https://tangwan.github.io/post/hello-gridea/">
-                <h3 class="post-title">
-                  Hello Gridea
-                </h3>
-              </a>
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/hello-gridea/" class="post-title gt-a-link">
+                    Hello Gridea
+                </a>
             </div>
-          
-        </div>
         
-          
-            <div class="paper" data-aos="fade-in">
-              <div id="gitalk-container"></div>
-            </div>
-          
 
-          
         
-      </div>
 
-      <div class="sm-12 md-4 col sidebar">
-  <div class="paper info-container">
-    <img src="https://tangwan.github.io/images/avatar.png?v=1592814608217" class="no-responsive avatar">
-    <div class="text-muted">博采众长才能相互印证,固步自封必将粗陋浅薄!</div>
-    <div class="social-container">
-      
         
-      
-        
-      
-        
-      
-        
-      
-        
-      
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      最新文章
-    </div>
-    <div class="row">
-      <ul>
-        
-          
-            <li>
-              <a href="https://tangwan.github.io/post/xing-neng-zhen-duan-li-qi-jprofiler-kuai-su-ru-men-he-zui-jia-shi-jian/">性能诊断利器 JProfiler 快速入门和最佳实践</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://tangwan.github.io/post/mazurs-sql-style-guide/">Mazur&#39;s SQL Style Guide</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://tangwan.github.io/post/ce-shi/">测试</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://tangwan.github.io/post/about/">关于</a>
-            </li>
-          
-        
-          
-            <li>
-              <a href="https://tangwan.github.io/post/hello-gridea/">Hello Gridea</a>
-            </li>
-          
-        
-      </ul>
-    </div>
-  </div>
-  <div class="paper">
-    <div class="sidebar-title">
-      标签列表
-    </div>
-    <div class="row">
-      
-        <a href="https://tangwan.github.io/tag/CBFPFmDLC/" class="badge success">
-          sql
-        </a>
-      
-        <a href="https://tangwan.github.io/tag/J9-E5qTak/" class="badge secondary">
-          springboot
-        </a>
-      
-        <a href="https://tangwan.github.io/tag/kL3KLiI0b/" class="badge success">
-          springcloud
-        </a>
-      
-        <a href="https://tangwan.github.io/tag/3tG3u9ueg/" class="badge success">
-          hadoop
-        </a>
-      
-        <a href="https://tangwan.github.io/tag/tXmh4BxIi/" class="badge success">
-          spark
-        </a>
-      
-        <a href="https://tangwan.github.io/tag/axORlLhHE/" class="badge secondary">
-          java
-        </a>
-      
-        <a href="https://tangwan.github.io/tag/gridea/" class="badge success">
-          Gridea
-        </a>
-      
-    </div>
-  </div>
-  <div class="paper">
-    Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
-  </div>
-</div>
+            
+                <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 
+<div id="gitalk-container"></div>
 
-    </div>
+<script>
 
-    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  var gitalk = new Gitalk({
+    clientID: '92302bd3179ddd188189',
+    clientSecret: 'e38f7bd35272f55e4b44d82fd7fc34f9a89b4c3f',
+    repo: 'tangwan.github.io',
+    owner: 'tangwan',
+    admin: ['tangwan'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
 
-<script type="application/javascript">
-
-AOS.init();
-
-hljs.initHighlightingOnLoad()
+  gitalk.render('gitalk-container')
 
 </script>
 
+            
 
+            
+        
 
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
+        
 
-      var gitalk = new Gitalk({
-        clientID: '92302bd3179ddd188189',
-        clientSecret: 'e38f7bd35272f55e4b44d82fd7fc34f9a89b4c3f',
-        repo: 'tangwan.github.io',
-        owner: 'tangwan',
-        admin: ['tangwan'],
-        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证,固步自封必将粗陋浅薄!</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
 
-      gitalk.render('gitalk-container')
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
 
-    </script>
-  
-
-  
-
-
-
-
-  </body>
+    </div>
+</div>
+</body>
 </html>
