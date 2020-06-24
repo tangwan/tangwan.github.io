@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tangwan.github.io</id>
     <title>Devin&apos;s Blog</title>
-    <updated>2020-06-24T08:16:54.583Z</updated>
+    <updated>2020-06-24T08:51:23.803Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tangwan.github.io"/>
     <link rel="self" href="https://tangwan.github.io/atom.xml"/>
@@ -679,29 +679,6 @@ from billingdaddy.billing_stored_details
 <li><a href="https://about.gitlab.com/handbook/business-ops/data-team/sql-style-guide/">GitLab's SQL Style Guide</a></li>
 </ul>
 <p>Hat-tip to Peter Butler, Dan Wyman, Simon Ouderkirk, Alex Cano, Adam Stone, Brian Kim, and Claire Carroll for providing feedback on this guide.</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[测试]]></title>
-        <id>https://tangwan.github.io/post/ce-shi/</id>
-        <link href="https://tangwan.github.io/post/ce-shi/">
-        </link>
-        <updated>2019-06-20T06:37:09.000Z</updated>
-        <summary type="html"><![CDATA[<p>瞎搞<br>
-瞎搞<br>
-瞎搞</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>瞎搞<br>
-瞎搞<br>
-瞎搞</p>
-<!-- more -->
-<h1 id="测试">测试</h1>
-<h2 id="测试-2">测试</h2>
-<h3 id="测试-3">测试</h3>
-<ul>
-<li>hello world</li>
-</ul>
-<figure data-type="image" tabindex="1"><img src="https://tangwan.github.io/post-images/1561602912948.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
