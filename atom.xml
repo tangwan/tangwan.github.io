@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tangwan.github.io</id>
     <title>Devin&apos;s Blog</title>
-    <updated>2020-06-24T07:43:24.516Z</updated>
+    <updated>2020-06-24T07:45:08.407Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tangwan.github.io"/>
     <link rel="self" href="https://tangwan.github.io/atom.xml"/>
@@ -10,6 +10,16 @@
     <logo>https://tangwan.github.io/images/avatar.png</logo>
     <icon>https://tangwan.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Devin&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[测试评论系统]]></title>
+        <id>https://tangwan.github.io/post/ce-shi-ping-lun-xi-tong/</id>
+        <link href="https://tangwan.github.io/post/ce-shi-ping-lun-xi-tong/">
+        </link>
+        <updated>2020-06-24T07:43:55.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="hello">hello</h1>
+<p>你好</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[性能诊断利器 JProfiler 快速入门和最佳实践]]></title>
         <id>https://tangwan.github.io/post/xing-neng-zhen-duan-li-qi-jprofiler-kuai-su-ru-men-he-zui-jia-shi-jian/</id>
