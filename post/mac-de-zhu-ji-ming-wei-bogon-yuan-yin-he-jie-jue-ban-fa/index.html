@@ -1,0 +1,256 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Mac的主机名为bogon原因和解决办法 | Devin&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1735789697463">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-131285531-1');
+</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script> 
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/friends" class="menu gt-a-link">
+                    友链
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                    留言
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1735789697463"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Mac的主机名为bogon原因和解决办法
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2017-08-01 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/8ScH3ncaX/" class="post-tags">
+                            # mac
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="原因">原因:</h2>
+<p>在使用IntelliJIDEA和terminal工具时,主机名显示为bogon(虚拟).这是因为终端会首先向DNS查询本机IP对应的主机名,查询不到才会显示我们自己设置的主机名,而由于我们配置或默认的DNS错误地将保留地址反向的NS查询结果返回了bogon. 其中bogon本应该用来指虚假的IP地址,而非保留IP地址.因此就出现了会时不时地打印bogon这种奇怪名字作为计算机名的现象了.</p>
+<h2 id="解决">解决:</h2>
+<p>让终端直接显示我们的主机名而不是从DNS查询即可显示正确的主机名,请替换<code>你的主机名</code>为你想要设置的主机名,使用英文字母不要带空格例如:<code>Devin-MBP</code>.</p>
+<pre><code class="language-shell">$ sudo hostname 你的主机名
+$ sudo scutil --set LocalHostName 你的主机名
+$ sudo scutil --set HostName 你的主机名
+</code></pre>
+<h2 id="补充一点">补充一点:</h2>
+<p>设置电脑名称,别人可以在局域网看到此电脑名称,<code>设置</code><mark>&gt;<code>共享</code></mark>&gt;<code>电脑名称</code>==&gt;输入即可,也可以使用下面的命令行修改.</p>
+<pre><code class="language-shell">$ sudo scutil --set ComputerName 你的主机名		#设置电脑名称,别人在网络共享上可以看到这个名字
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://s2.loli.net/2023/08/11/hCGU6HdroOY93pL.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://s2.loli.net/2023/08/11/8CE7UcZT4kHrPF9.png" alt="" loading="lazy"></figure>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/dan-li-mo-shi-zhi-lan-han-shi-he-e-han-shi/" class="post-title gt-a-link">
+                    单例模式之懒汉式和饿汉式
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/mac-de-zhu-ji-ming-wei-bogon-yuan-yin-he-jie-jue-ban-fa/" class="leancloud_visitors" data-flag-title="Mac的主机名为bogon原因和解决办法">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'ebD25vv6zg7Y33bkd2u04EhA-gzGzoHsz',
+		appKey: 'PtLdgaMXGHXjxsvfz4H3qpvi',
+		avatar: '',
+		pageSize: 5,
+		recordIp: true,
+		placeholder: '如有疑问，请在这里留言',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证，故步自封必将粗陋浅薄。</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/tangwan" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/_tangwan" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

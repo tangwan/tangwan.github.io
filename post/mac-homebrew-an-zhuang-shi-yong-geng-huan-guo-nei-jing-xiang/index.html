@@ -1,0 +1,367 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Mac Homebrew安装使用更换国内镜像 | Devin&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1735789697463">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-131285531-1');
+</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script> 
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/friends" class="menu gt-a-link">
+                    友链
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                    留言
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1735789697463"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Mac Homebrew安装使用更换国内镜像
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-08-11 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/8ScH3ncaX/" class="post-tags">
+                            # mac
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="简介">简介</h2>
+<p>Homebrew工具可以看作是mac上的软件包管理器,类似于<code>yum</code>之于<code>centos或redhat</code>和<code>apt-get</code>之于<code>ubuntu</code>，安装软件包会自动安装依赖的软件包，Homebrew 是一款自由及开放源代码的软件包管理系统，用以简化 macOS 和 linux 系统上的软件安装过程。它拥有安装、卸载、更新、查看、搜索等很多实用的功能，通过简单的一条指令，就可以实现包管理，十分方便快捷。<code>Homebrew</code> 主要有四个部分组成: <code>brew</code>、<code>homebrew-core</code> 、<code>homebrew-bottles</code>、<code>homebrew-cask</code>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">brew</td>
+<td style="text-align:left">Homebrew 源代码仓库</td>
+</tr>
+<tr>
+<td style="text-align:left">homebrew-core</td>
+<td style="text-align:left">Homebrew 核心软件仓库</td>
+</tr>
+<tr>
+<td style="text-align:left">homebrew-bottles</td>
+<td style="text-align:left">Homebrew 预编译二进制软件包</td>
+</tr>
+<tr>
+<td style="text-align:left">homebrew-cask</td>
+<td style="text-align:left">提供 macOS 应用和大型二进制文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="安装">安装</h2>
+<p>安装homebrew只需要一个命令,可以查看网站，<a href="https://brew.sh/index_zh-cn">https://brew.sh/index_zh-cn</a></p>
+<p><a href="https://github.com/Homebrew">Homebrew GitHub所有仓库地址，https://github.com/Homebrew</a></p>
+<p><a href="https://gitee.com/brew-cn">Homebrew Gitee所有仓库地址，https://gitee.com/brew-cn</a></p>
+<p><a href="https://mirrors.ustc.edu.cn/">Homebrew 中科大所有仓库地址，搜索brew，https://mirrors.ustc.edu.cn</a></p>
+<p><a href="https://mirrors.aliyun.com/homebrew/">Homebrew 阿里源所有仓库地址，https://mirrors.aliyun.com/homebrew/</a></p>
+<p><a href="https://mirrors.cloud.tencent.com/homebrew/">Homebrew 腾讯源所有仓库地址，https://mirrors.cloud.tencent.com/homebrew/</a></p>
+<p>这么多源随意选一个就可以，网上有些清华大学的源现在好像已经访问不了了，上面的源大家可以收藏一下以备不时之需</p>
+<pre><code class="language-shell"># 需要能连接github,国内用户可能会很卡
+$ /bin/bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)&quot;
+
+# 可以使用国内代理镜像,国内镜像较多,gitee半小时同步一次github代码库,下面以码云gitee为例
+$ curl -sL https://gitee.com/brew-cn/use-brew-cn/raw/master/install.sh | bash -
+</code></pre>
+<p>安装完成后执行下面命令验证命令是否正常，默认安装位置在<code>/usr/local/Homebrew</code></p>
+<pre><code class="language-shell">$ brew --version
+</code></pre>
+<h2 id="更换国内源">更换国内源</h2>
+<p>使用<code>brew</code>安装软件默认从github来下载软件，国内不太稳定，我们可以更换brew下载源为国内的源加速软件安装过程，这里随便选一个吧，我就选阿里的源吧，毕竟大公司不差钱，线路稳定。替换源就是替换默认的<code>brew</code>、<code>brew-core</code>、<code>brew-cast</code>关联的仓库和<code>homebrew-bottles</code>二进制包下载地址。</p>
+<pre><code class="language-shell"># 这些仓库默认都是关联的github仓库地址，三个仓库位置可以用下面三个命令查看
+$ echo $(brew --repo)
+$ echo $(brew --repo homebrew/core)
+$ echo $(brew --repo homebrew/cask)
+# 查看默认关联的仓库地址
+$ cd $(brew --repo)
+$ git remote -v
+
+# 修改这三个仓库关联远程url
+$ git -C &quot;$(brew --repo)&quot; remote set-url origin https://mirrors.aliyun.com/homebrew/brew.git
+$ git -C &quot;$(brew --repo homebrew/core)&quot; remote set-url origin https://mirrors.aliyun.com/homebrew/homebrew-core.git
+$ git -C &quot;$(brew --repo homebrew/cask)&quot; remote set-url origin https://mirrors.aliyun.com/homebrew/homebrew-cask.git
+
+# 替换homebrew-bottles二进制包下载地址为国内地址，就是新增环境变量，如果你已经有了就vim编辑替换url即可
+# 如果你使用zsh
+$ echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles' &gt;&gt; ~/.zshrc
+$ source ~/.zshrc
+
+# 如果你使用bash
+$ echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.aliyun.com/homebrew/homebrew-bottles' &gt;&gt; ~/.bash_profile
+$ source ~/.bash_profile
+
+# 刷新源
+brew update
+
+# 还原为默认的github源
+$ git -C &quot;$(brew --repo)&quot; remote set-url origin https://github.com/Homebrew/brew.git
+$ git -C &quot;$(brew --repo homebrew/core)&quot; remote set-url origin https://github.com/Homebrew/homebrew-core.git
+$ git -C &quot;$(brew --repo homebrew/cask)&quot; remote set-url origin https://github.com/Homebrew/homebrew-cask.git
+# 找到 ~/.bash_profile 或者 ~/.zshrc 中的HOMEBREW_BOTTLE_DOMAIN 一行删除
+$ brew update
+</code></pre>
+<h2 id="使用">使用</h2>
+<pre><code class="language-shell">$ brew --help		#查看帮助
+$ man brew		#查看使用手册
+
+# 常用命令
+$ brew list		#查看已安装的二进制包和桌面应用，Casks为桌面应用列表，Formulae为二进制包列表
+# 安装桌面软件
+$ brew search another-redis	#搜索软件名称
+$ brew install another-redis-desktop-manager	#安装redis一个优秀的GUI客户端
+$ brew reinstall another-redis-desktop-manager	#重新安装
+$ brew upgrade another-redis-desktop-manager	#更新已软件
+
+# 安装非桌面软件
+git --version	#查看现在的git版本
+$ brew install git	#安装最新版git
+$ brew link git	#把brew安装的git软链到/usr/local/bin/git
+$ git --version	#查看现在的git版本
+
+# 其他一些常用命令
+$ brew update 	#更新所有已安装的依赖包含homebrew自己
+$ brew uninstall xxx1 xxx2	#卸载软件xxx1和xxx2
+$ brew list  xxx	#查看xxx软件的安装位置,不带xxx软件名将列出所有已安装软件
+$ brew info git		#查看安装的git详细信息，包含依赖的安装项
+$ brew config			#查看当前brew的配置，包含设置的源
+$ brew doctor			#检查brew的一些问题，会给出修复建议命令
+$ brew cleanup		#清理一些过期的链接之类的
+$ brew install --verbose --debug FORMULA|CASK	#debug安装模式，软件安装出错时可debug安装查看日志
+$ brew unlink -n git	#查看如果取消软链，哪些文件将被取消软链，-n代表尝试执行，非真正执行
+
+# 开发者工具，用对应的命令+ --help查看用法
+$ brew create URL [--no-fetch]	#把自己开发的软件包打成brew安装包
+$ brew edit [FORMULA|CASK...]
+
+# 更多支持的命令
+$ brew commands
+
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://files.ppznet.com/devTools/images/202111062054929.png" alt="image-20211106205402765" loading="lazy"></figure>
+<h2 id="参考文档">参考文档</h2>
+<blockquote>
+<p><a href="https://docs.brew.sh/Formula-Cookbook">Homebrew Documentation</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/351199589">brew update 更新时 shallow clone</a></p>
+<p><a href="https://cloud.tencent.com/developer/article/1614039">Mac下brew切换为国内源</a></p>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/">Homebrew / Linuxbrew 镜像使用帮助</a></p>
+<p><a href="https://blog.csdn.net/sexyluna/article/details/115587659">解决终端compinit:503: no such file or directory: /usr/local/share/zsh/site-functions/_brew_cask</a></p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/java-gong-ping-suo-he-fei-gong-ping-suo-qu-bie/" class="post-title gt-a-link">
+                    Java公平锁和非公平锁区别
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/mac-homebrew-an-zhuang-shi-yong-geng-huan-guo-nei-jing-xiang/" class="leancloud_visitors" data-flag-title="Mac Homebrew安装使用更换国内镜像">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'ebD25vv6zg7Y33bkd2u04EhA-gzGzoHsz',
+		appKey: 'PtLdgaMXGHXjxsvfz4H3qpvi',
+		avatar: '',
+		pageSize: 5,
+		recordIp: true,
+		placeholder: '如有疑问，请在这里留言',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证，故步自封必将粗陋浅薄。</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/tangwan" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/_tangwan" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

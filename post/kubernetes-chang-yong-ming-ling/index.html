@@ -1,0 +1,372 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>kubernetes常用命令 | Devin&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1735789697463">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-131285531-1');
+</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script> 
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/friends" class="menu gt-a-link">
+                    友链
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                    留言
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1735789697463"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    kubernetes常用命令
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-07-01 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/TS22Zs4TR/" class="post-tags">
+                            # k8s
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="常用命令">常用命令</h2>
+<pre><code class="language-shell"># 查看k8s集群节点简单信息
+$ kubectl get nodes
+# 查询k8s集群节点详细信息
+$ kubectl get nodes -o wide
+# 查看k8s集群更详细的信息
+$ kubectl describe nodes
+
+# 查询k8s集群所有namespace
+$ kubectl get ns
+$ kubectl get namespace
+$ kubectl describe namespace
+# 创建namespace,名称为dev
+$ kubectl create namespace -name dev
+# 删除namespace (如果namespace下面有pods,需要先删除namespace下pods)
+$ kubectl delete namespace dev
+
+# 以下命令不带-n参数指定namespace,默认都在default这个namespace下执行
+# 创建一个nginx服务,副本数量3
+$ kubectl create deployment nginx-app --image=nginx --replicas=3
+# 查看此deployment状态,READY 3/3 标识3个副本均启动完成
+$ kubectl get deploy nginx-app
+# 进入deployment的任一pod终端,使用curl访问
+$ kubectl get pods
+$ kubectl exec -it nginx-app-d6ff45774-8wb5t -- /bin/sh
+# 在pod中执行非交互式命令
+$ kubectl exec nginx-app-d6ff45774-xm6bm -- cat /etc/hostname
+# 查看是否返回nginx首页
+	$ curl localhost
+	$ exit
+# 创建service,暴露deployment的服务供外部访问,随机生成NodePort端口,--target-port=8000容器端口
+$ kubectl expose deployment nginx-app --port=80 --type=NodePort --name=nginx-http
+$ 
+# 查看创建的service端口,使用浏览器访问nodeIp:此端口可以看到nginx页面,多次访问,请求随机落到3个副本上
+$ kubectl get svc nginx-http
+# 查看指定pod的滚动日志
+$ kubectl logs -f nginx-app-d6ff45774-xm6bm
+
+# 查看deployment,service,pods并删除
+$ kubectl get svc
+$ kubectl get deploy
+$ kubectl get pods
+$ kubectl delete svc nginx-http
+$ kubectl delete deploy nginx-app
+$ kubectl delete pods nginx
+</code></pre>
+<h2 id="发布一个nginx服务">发布一个nginx服务</h2>
+<p>创建 <code>nginx-pod.yml</code> <code>nginx-deployment.yml</code> <code>nginx-svc.yml</code> 三个yml配置文件,三个配置文件内容也可以写在一个yml中</p>
+<ul>
+<li>nginx-pod.yml</li>
+</ul>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+</code></pre>
+<ul>
+<li>nginx-deployment.yml</li>
+</ul>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+</code></pre>
+<ul>
+<li>nginx-svc.yml</li>
+</ul>
+<pre><code class="language-yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30080
+  type: NodePort
+</code></pre>
+<h2 id="使用配置文件定义服务发布服务">使用配置文件定义服务发布服务</h2>
+<pre><code class="language-shell"># 发布pod到指定的namespace
+$ kubectl apply -f nginx-pod.yml -n dev
+$ kubectl apply -f nginx-deployment.yml -n dev
+$ kubectl apply -f nginx-svc.yml -n dev
+$ kubectl get deploy -n dev
+$ kubectl get svc -n dev
+# 本机浏览器访问http://nodeIp:30080,能看到nginx欢迎页就代表服务启动没有问题
+# 查看副本数量
+$ kubectl get rs
+# 手动扩缩容
+$ kubectl scale deploy nginx-deployment --replicas=4 -n dev
+# 自动扩缩容,cpu使用率达到80%,最小副本数量10,最大扩容数量15
+$ kubectl autoscale deploy nginx-deployment --min=10 --max=15 --cpu-percent=80
+# 查看自动扩缩容配置
+$ kubectl get hpa
+# 删除自动扩缩容配置
+$ kubectl delete hpa nginx-deployment
+# 删除deployment和service
+$ kubectl delete -f nginx-deployment.yml -n dev
+$ kubectl delete -f nginx-svc.yml -n dev
+</code></pre>
+<blockquote>
+<p>http://docs.kubernetes.org.cn/683.html</p>
+<p>如果不知道命令用法可以加参数 --help查看帮助文档</p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/rabbitmq-chang-jian-wen-ti-he-da-an/" class="post-title gt-a-link">
+                    RabbitMQ常见问题和答案
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/kubernetes-chang-yong-ming-ling/" class="leancloud_visitors" data-flag-title="kubernetes常用命令">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'ebD25vv6zg7Y33bkd2u04EhA-gzGzoHsz',
+		appKey: 'PtLdgaMXGHXjxsvfz4H3qpvi',
+		avatar: '',
+		pageSize: 5,
+		recordIp: true,
+		placeholder: '如有疑问，请在这里留言',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证，故步自封必将粗陋浅薄。</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/tangwan" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/_tangwan" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

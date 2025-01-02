@@ -1,0 +1,288 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>LinkedHashMap 使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用(LRU)顺序 | Devin&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1735789697463">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-131285531-1');
+</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script> 
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/friends" class="menu gt-a-link">
+                    友链
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                    留言
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1735789697463"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    LinkedHashMap 使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用(LRU)顺序
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2023-08-01 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/QwBzDAnjM/" class="post-tags">
+                            # java
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>在 Java 的 LinkedHashMap 中，元素的顺序是基于插入顺序或访问顺序来维护的，具体取决于构造 LinkedHashMap 对象时所使用的构造方法。</p>
+<ul>
+<li>
+<p>默认情况下，LinkedHashMap 使用插入顺序来维护元素的顺序。这意味着元素会按照它们被插入到 LinkedHashMap 中的顺序进行迭代和访问。</p>
+</li>
+<li>
+<p>当使用带有 accessOrder 参数的构造方法时，LinkedHashMap 将使用访问顺序来维护元素的顺序。<br>
+通过将 accessOrder 参数设置为 true，你可以启用访问顺序。在访问顺序模式下，每次访问一个元素（包括获取或更新操作）会将该元素移到链表末尾，使得最近访问的元素位于链表末尾。</p>
+</li>
+</ul>
+<p>需要注意的是，无论使用插入顺序还是访问顺序，LinkedHashMap 内部都使用哈希表来存储键值对。<br>
+链表结构只是用来维护元素的顺序。</p>
+<p>以下是一个示例：</p>
+<pre><code class="language-java">import java.util.LinkedHashMap;
+
+public class LinkedHashMapExample {
+public static void main(String[] args) {
+// 使用插入顺序创建 LinkedHashMap
+LinkedHashMap&lt;Integer, String&gt; linkedHashMap = new LinkedHashMap&lt;&gt;();
+
+        linkedHashMap.put(3, &quot;C&quot;);
+        linkedHashMap.put(1, &quot;A&quot;);
+        linkedHashMap.put(2, &quot;B&quot;);
+
+        System.out.println(linkedHashMap); // 输出：{3=C, 1=A, 2=B}
+
+        // 使用访问顺序创建 LinkedHashMap
+        LinkedHashMap&lt;Integer, String&gt; accessOrderedMap = new LinkedHashMap&lt;&gt;(16, 0.75f, true);
+
+        accessOrderedMap.put(3, &quot;C&quot;);
+        accessOrderedMap.put(1, &quot;A&quot;);
+        accessOrderedMap.put(2, &quot;B&quot;);
+
+        System.out.println(accessOrderedMap); // 输出：{3=C, 1=A, 2=B}
+
+        // 进行一些访问操作
+        accessOrderedMap.get(2);
+        accessOrderedMap.get(1);
+
+        System.out.println(accessOrderedMap); // 输出：{3=C,  2=B, 1=A}
+    }
+}
+</code></pre>
+<p>在上述示例中，第一个 LinkedHashMap 使用插入顺序，元素的顺序与插入顺序相同。<br>
+第二个 LinkedHashMap 启用了访问顺序，通过访问键为 1 和 2 的元素，这两个元素被移到链表末尾，<br>
+因此输出结果：{3=C, 2=B, 1=A}。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/shi-yong-python3-pillow-ku-dui-tu-pian-jin-xing-pi-liang-ya-suo/" class="post-title gt-a-link">
+                    使用python3 Pillow库对图片进行批量压缩
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/linkedhashmap-shi-yong-shuang-xiang-lian-biao-lai-wei-hu-yuan-su-de-shun-xu-shun-xu-wei-cha-ru-shun-xu-huo-zhe-zui-jin-zui-shao-shi-yong-lrushun-xu/" class="leancloud_visitors" data-flag-title="LinkedHashMap 使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用(LRU)顺序">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'ebD25vv6zg7Y33bkd2u04EhA-gzGzoHsz',
+		appKey: 'PtLdgaMXGHXjxsvfz4H3qpvi',
+		avatar: '',
+		pageSize: 5,
+		recordIp: true,
+		placeholder: '如有疑问，请在这里留言',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证，故步自封必将粗陋浅薄。</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/tangwan" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/_tangwan" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

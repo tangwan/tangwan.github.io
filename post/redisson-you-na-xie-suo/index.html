@@ -1,0 +1,276 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Redisson有哪些锁 | Devin&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1735789697463">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-131285531-1');
+</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script> 
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/friends" class="menu gt-a-link">
+                    友链
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                    留言
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1735789697463"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Redisson有哪些锁
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2023-08-16 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/MEgLIGali/" class="post-tags">
+                            # NoSQL
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <p>Redisson 是一个基于 Redis 的分布式 Java 对象和服务的框架，在 Redisson 中提供了多种类型的锁来实现分布式锁的功能。以下是<br>
+Redisson 提供的几种主要的锁类型：</p>
+<ol>
+<li>
+<p>可重入锁（ReentrantLock）：与 Java 的 ReentrantLock 类似，支持可重入特性。即同一个线程可以多次获得该锁，并且需要释放相同次数才能完全释放锁。</p>
+</li>
+<li>
+<p>公平锁（FairLock）：可重入锁的变体，实现了公平性。当多个请求获取锁时，按照请求的顺序进行排队，保证先请求的先获取锁。</p>
+</li>
+<li>
+<p>读写锁（ReadWriteLock）：与 Java 的 ReadWriteLock 类似，支持读写分离。多个线程可以同时获取读锁，但只有一个线程可以获取写锁。</p>
+</li>
+<li>
+<p>联锁（MultiLock）：同时获取多个锁对象，只有当所有锁都成功获取时，才算获取成功。类似于数据库事务中的行锁。</p>
+</li>
+<li>
+<p>红锁（RedLock）：在分布式环境中实现的一种基于 Redis 的互斥锁算法。通过在不同的 Redis 节点上设置互斥锁，通过多数节点达成共识来获取锁。</p>
+</li>
+<li>
+<p>信号量（Semaphore）：控制同时访问某个资源的线程数量。可以用于实现限流策略。</p>
+</li>
+<li>
+<p>可过期性信号量（PermitExpirableSemaphore）: Redisson的可过期性信号量（PermitExpirableSemaphore）实在RSemaphore对象的基础上，为每个信号增加了一个过期时间。每个信号可以通过独立的ID来辨识，释放时只能通过提交这个ID才能释放。</p>
+</li>
+<li>
+<p>闭锁（CountDownLatch）: Redisson的分布式闭锁（CountDownLatch）Java对象RCountDownLatch采用了与java.util.concurrent.CountDownLatch相似的接口和用法。</p>
+</li>
+</ol>
+<p>以上是 Redisson 提供的几种常见的锁类型，每种锁都有不同的应用场景和特点，可以根据具体的需求选择适合的锁类型来实现分布式锁。此外，Redisson<br>
+还提供了其他功能强大的分布式对象和服务，如分布式集合、分布式 Map、分布式任务等。</p>
+<h2 id="参考">参考：</h2>
+<blockquote>
+<p><a href="https://blog.csdn.net/a184477587/article/details/114454415">Redisson 几种锁</a></p>
+</blockquote>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/java-yuan-shu-ju-kong-jian-cun-chu-de-shi-shi-me/" class="post-title gt-a-link">
+                    Java元数据空间存储的是什么
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/redisson-you-na-xie-suo/" class="leancloud_visitors" data-flag-title="Redisson有哪些锁">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'ebD25vv6zg7Y33bkd2u04EhA-gzGzoHsz',
+		appKey: 'PtLdgaMXGHXjxsvfz4H3qpvi',
+		avatar: '',
+		pageSize: 5,
+		recordIp: true,
+		placeholder: '如有疑问，请在这里留言',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证，故步自封必将粗陋浅薄。</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/tangwan" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/_tangwan" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

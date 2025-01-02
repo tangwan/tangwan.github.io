@@ -1,0 +1,838 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>istio模拟灰度发布 | Devin&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1735789697463">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-131285531-1');
+</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script> 
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/friends" class="menu gt-a-link">
+                    友链
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                    留言
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1735789697463"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    istio模拟灰度发布
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2023-09-14 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/TS22Zs4TR/" class="post-tags">
+                            # k8s
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="istio功能简介">istio功能简介</h2>
+<p>Istio是一个开源的服务网格平台，用于管理和连接容器化应用程序的微服务。它提供了一系列功能，包括：</p>
+<ol>
+<li>
+<p>流量管理：Istio可以控制和路由应用程序的流量，实现灰度发布、A/B测试、故障恢复等功能。</p>
+</li>
+<li>
+<p>安全性：Istio提供了强大的安全功能，包括身份认证、授权、访问控制和加密通信，以保护应用程序的安全性。</p>
+</li>
+<li>
+<p>观察性：Istio可以收集和展示应用程序的运行时数据，如请求流量、延迟、错误率等，帮助开发人员进行故障排查和性能优化。</p>
+</li>
+<li>
+<p>策略和配额：Istio允许定义和实施各种策略和配额，如限制每秒请求数、设置访问控制规则等。</p>
+</li>
+<li>
+<p>故障注入和测试：Istio提供了故障注入的功能，可以模拟网络延迟、错误响应等情况，以测试应用程序的容错能力。</p>
+</li>
+</ol>
+<p>总之，Istio可以帮助开发人员更好地管理和监控微服务架构，提供更好的安全性、可观察性和流量控制能力。</p>
+<p>下面使用<a href="https://istio.io/latest/zh/docs/setup/getting-started/">官方文档</a>的例子做验证，所有资源文件部署在<code>default</code>namespace下</p>
+<h2 id="模拟部分流量管理功能">模拟部分流量管理功能</h2>
+<ol>
+<li>给命名空间添加标签</li>
+</ol>
+<pre><code class="language-shell"># 指示 Istio 在部署应用的时候，自动注入 Envoy 边车代理
+$ kubectl label namespace default istio-injection=enabled
+</code></pre>
+<ol start="2">
+<li>部署istio gateway，作为流量入口，一个k8s集群只需要一个网关</li>
+</ol>
+<p><code>bookinfo-gateway.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+spec:
+  # The selector matches the ingress gateway pod labels.
+  # If you installed Istio using Helm following the standard documentation, this would be &quot;istio=ingress&quot;
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    #如果配置具体域名，需要通过域名访问，域名可在本机hosts配置，如果配置*则可用ip或域名访问
+    hosts:
+    - &quot;*&quot;
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bookinfo
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - bookinfo-gateway
+  http:
+  - match:
+    - uri:
+        exact: /productpage
+    - uri:
+        prefix: /static
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        prefix: /api/v1/products
+    route:
+    - destination:
+        host: productpage
+        port:
+          number: 9080
+
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f bookinfo-gateway.yaml
+</code></pre>
+<ol start="3">
+<li>部署bookinfo应用</li>
+</ol>
+<p><code>bookinfo.yaml</code></p>
+<pre><code class="language-yaml"># Copyright Istio Authors
+#
+#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+##################################################################################################
+# This file defines the services, service accounts, and deployments for the Bookinfo sample.
+#
+# To apply all 4 Bookinfo services, their corresponding service accounts, and deployments:
+#
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+#
+# Alternatively, you can deploy any resource separately:
+#
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l service=reviews # reviews Service
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l account=reviews # reviews ServiceAccount
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l app=reviews,version=v3 # reviews-v3 Deployment
+##################################################################################################
+
+##################################################################################################
+# Details service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: details
+  labels:
+    app: details
+    service: details
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: details
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-details
+  labels:
+    account: details
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: details-v1
+  labels:
+    app: details
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: details
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: details
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-details
+      containers:
+      - name: details
+        image: docker.io/istio/examples-bookinfo-details-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+##################################################################################################
+# Ratings service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratings
+  labels:
+    app: ratings
+    service: ratings
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: ratings
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-ratings
+  labels:
+    account: ratings
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratings-v1
+  labels:
+    app: ratings
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ratings
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: ratings
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-ratings
+      containers:
+      - name: ratings
+        image: docker.io/istio/examples-bookinfo-ratings-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+##################################################################################################
+# Reviews service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews
+  labels:
+    app: reviews
+    service: reviews
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: reviews
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-reviews
+  labels:
+    account: reviews
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews-v1
+  labels:
+    app: reviews
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: reviews
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/istio/examples-bookinfo-reviews-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: &quot;/tmp/logs&quot;
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews-v2
+  labels:
+    app: reviews
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: reviews
+        version: v2
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/istio/examples-bookinfo-reviews-v2:1.18.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: &quot;/tmp/logs&quot;
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews-v3
+  labels:
+    app: reviews
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: reviews
+        version: v3
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/istio/examples-bookinfo-reviews-v3:1.18.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: &quot;/tmp/logs&quot;
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+##################################################################################################
+# Productpage services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: productpage
+  labels:
+    app: productpage
+    service: productpage
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: productpage
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-productpage
+  labels:
+    account: productpage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productpage-v1
+  labels:
+    app: productpage
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productpage
+      version: v1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: &quot;true&quot;
+        prometheus.io/port: &quot;9080&quot;
+        prometheus.io/path: &quot;/metrics&quot;
+      labels:
+        app: productpage
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-productpage
+      containers:
+      - name: productpage
+        image: docker.io/istio/examples-bookinfo-productpage-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+---
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f bookinfo.yaml
+$ kubectl get pods
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://s2.loli.net/2023/09/14/rl9wKgMd1j64b7y.png" alt="iShot_2023-09-14_13.47.39.png" loading="lazy"></figure>
+<p>一个<code>productpage</code>前端和<code>details</code>、<code>ratings</code>、<code>reviews</code>后端接口服务，<code>reviews</code>部署了3个版本</p>
+<p>我们现在没有创建任何目标规则，一个请求从gateway--&gt;k8s service--&gt;POD，reviews三个版本<code>labels.app</code>相同，<br>
+默认每次请求<code>productpage</code>服务会轮训调用三个版本的<code>reviews</code></p>
+<pre><code class="language-shell"># 设置 EXTERNAL-IP 的值之后， 您的环境就有了一个外部的负载均衡器，
+# 可以将其用作入站网关。 但如果 EXTERNAL-IP 的值为 &lt;none&gt; (或者一直是 &lt;pending&gt; 状态)， 
+# 则您的环境则没有提供可作为入站流量网关的外部负载均衡器。 
+# 在这个情况下，您还可以用服务（Service）的节点端口访问网关。
+$ kubectl get svc istio-ingressgateway -n istio-system
+# 查看Service IP和应用端口
+$ kubectl get svc
+</code></pre>
+<p>我这里有<code>EXTERNAL-IP</code>我就用<code>http://${EXTERNAL-IP}/productpage</code>在浏览器访问，<br>
+否则就用<code>http://${CLUSTER-IP}:9080/productpage</code> (需要再集群任意一台机器上访问)</p>
+<figure data-type="image" tabindex="2"><img src="https://s2.loli.net/2023/09/14/aUrReouGtn3EyX2.png" alt="iShot_2023-09-14_14.11.03.png" loading="lazy"></figure>
+<p>红色框显示当前提供服务的是哪个版本的<code>reviews</code>，多次刷新发现会在 v1 v2 v3之间变化</p>
+<ol start="4">
+<li>设置每个版本的子集<code>subsets</code>，可以为不同版本指定不同的负载均衡算法</li>
+</ol>
+<p><code>distination-rule-reviews.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+#    trafficPolicy:
+#      loadBalancer:
+#        simple: ROUND_ROBIN  
+  - name: v3
+    labels:
+      version: v3
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f distination-rule-reviews.yaml
+</code></pre>
+<ol start="5">
+<li>测试-reviews v2和v3版本各50%权重</li>
+</ol>
+<p><code>virtual-service-reviews-v2-v3.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 50
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 50
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-v2-v3.yaml
+</code></pre>
+<p>浏览器多次刷新，发现右下角<code>reviews</code>版本在v2 v3之间切换，总体上权重维持1:1</p>
+<ol start="6">
+<li>测试-reviews v1和v2版本各权重90:10权重</li>
+</ol>
+<p><code>virtual-service-reviews-90-10.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 90
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 10
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-90-10.yaml
+</code></pre>
+<p>浏览器多次刷新，发现右下角<code>reviews</code>版本在v1 v2之间切换，总体上权重维持9:1</p>
+<ol start="7">
+<li>测试-把权重全部给到v3</li>
+</ol>
+<p><code>virtual-service-reviews-v3.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-v3.yaml
+</code></pre>
+<p>浏览器多次刷新，发现右下角<code>reviews</code>版本保持v3；经过上面5、6、7三个步骤我们就明白了如何控制灰度发布</p>
+<ol start="8">
+<li>测试-带有特征的流量转发</li>
+</ol>
+<p>有时为了验证新版本需要把带有指定特征的流量导入到新版本，无特征的流量继续访问老版本</p>
+<p><code>virtual-service-reviews-jason-v2-v3.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-jason-v2-v3.yaml
+</code></pre>
+<p>如果请求头带有<code>end-user:jason</code>，就把流量转到v2版本，否则流量转到v3，这里的<code>exact</code>代表全匹配模式，<br>
+还可以指定prefix、正则表达式等支持的匹配模式；此时我们多次刷新页面发现都是v3版本，我们在右上角登录<br>
+<code>jason</code>用户（密码可不填），再次刷新页面发现都是v2版本；通过查看<code>productpage</code>服务日志发现请求<code>reviews</code><br>
+接口带了<code>end-user:jason</code>请求头</p>
+<figure data-type="image" tabindex="3"><img src="https://s2.loli.net/2023/09/14/8rwcHiCQeR4dqmu.png" alt="iShot_2023-09-14_14.48.02.png" loading="lazy"></figure>
+<p>Istio中的&quot;match&quot;用于定义流量管理规则，以便对特定的请求进行匹配和操作。以下是一些常见的匹配模式：</p>
+<ol>
+<li>
+<p>URI匹配：可以基于请求的URI路径进行匹配，例如<code>/api/v1/users/*</code>。</p>
+</li>
+<li>
+<p>方法匹配：可以基于HTTP方法（GET、POST等）进行匹配。</p>
+</li>
+<li>
+<p>主机匹配：可以基于请求的主机名进行匹配，例如<code>example.com</code>。</p>
+</li>
+<li>
+<p>标头匹配：可以基于请求的标头进行匹配，例如<code>x-request-id=123456</code>。</p>
+</li>
+<li>
+<p>标签匹配：可以基于Kubernetes标签进行匹配，例如<code>version=v1</code>。</p>
+</li>
+<li>
+<p>端口匹配：可以基于请求的端口号进行匹配。</p>
+</li>
+</ol>
+<p>这些匹配模式可以组合使用，以创建更复杂的匹配规则。例如，可以使用URI匹配和方法匹配来仅匹配特定路径和HTTP方法的请求。Istio的匹配规则非常灵活，可以根据具体的需求进行定制。</p>
+<h2 id="应用部署方案">应用部署方案</h2>
+<figure data-type="image" tabindex="4"><img src="https://s2.loli.net/2023/09/14/Bt5JN9ilcG3Kx8M.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://s2.loli.net/2023/09/14/BYfaUVR7iHOl8n3.png" alt="" loading="lazy"></figure>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/shell-bian-liang-qian-tao/" class="post-title gt-a-link">
+                    Shell变量嵌套
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/istio-mo-ni-hui-du-fa-bu/" class="leancloud_visitors" data-flag-title="istio模拟灰度发布">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'ebD25vv6zg7Y33bkd2u04EhA-gzGzoHsz',
+		appKey: 'PtLdgaMXGHXjxsvfz4H3qpvi',
+		avatar: '',
+		pageSize: 5,
+		recordIp: true,
+		placeholder: '如有疑问，请在这里留言',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证，故步自封必将粗陋浅薄。</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/tangwan" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/_tangwan" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://tangwan.github.io</id>
+    <title>Devin&apos;s Blog</title>
+    <updated>2025-01-02T03:48:19.698Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://tangwan.github.io"/>
+    <link rel="self" href="https://tangwan.github.io/atom.xml"/>
+    <subtitle>博采众长才能相互印证，故步自封必将粗陋浅薄。</subtitle>
+    <logo>https://tangwan.github.io/images/avatar.png</logo>
+    <icon>https://tangwan.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2025, Devin&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Java公平锁和非公平锁加锁流程]]></title>
+        <id>https://tangwan.github.io/post/java-gong-ping-suo-he-fei-gong-ping-suo-jia-suo-liu-cheng/</id>
+        <link href="https://tangwan.github.io/post/java-gong-ping-suo-he-fei-gong-ping-suo-jia-suo-liu-cheng/">
+        </link>
+        <updated>2025-01-02T03:21:42.000Z</updated>
+        <content type="html"><![CDATA[<p>在Java中，<code>ReentrantLock</code> 提供了公平锁和非公平锁两种模式。它们的加锁流程有所不同，主要体现在线程获取锁的顺序上。下面我会用 <strong>流程图</strong> 和 <strong>文字说明</strong> 来详细解释这两种锁的加锁流程。</p>
+<hr>
+<h3 id="1-公平锁fair-lock">1. <strong>公平锁（Fair Lock）</strong></h3>
+<p>公平锁的特点是按照线程请求锁的顺序来分配锁，即先到先得。它的加锁流程如下：</p>
+<figure data-type="image" tabindex="1"><img src="https://tangwan-1257132932.cos.ap-shanghai.myqcloud.com/blog/202501/bee787d8e9dab76df8b9ca91e5b228ec.png" alt="" loading="lazy"></figure>
+<h4 id="流程说明">流程说明：</h4>
+<ol>
+<li>线程尝试获取锁。</li>
+<li>如果锁空闲，检查是否有其他线程在等待队列中：
+<ul>
+<li>如果没有等待队列，当前线程直接获取锁。</li>
+<li>如果有等待队列，当前线程加入队列尾部，等待被唤醒。</li>
+</ul>
+</li>
+<li>如果锁被占用，当前线程加入等待队列尾部，等待被唤醒。</li>
+<li>当锁释放时，队列中的第一个线程会被唤醒并尝试获取锁。</li>
+</ol>
+<hr>
+<h3 id="2-非公平锁non-fair-lock">2. <strong>非公平锁（Non-Fair Lock）</strong></h3>
+<p>非公平锁的特点是线程可以直接尝试获取锁，而不考虑等待队列的顺序。它的加锁流程如下：</p>
+<figure data-type="image" tabindex="2"><img src="https://tangwan-1257132932.cos.ap-shanghai.myqcloud.com/blog/202501/0328a5257fc6f23901da151c73adb846.jpg" alt="" loading="lazy"></figure>
+<h4 id="流程说明-2">流程说明：</h4>
+<ol>
+<li>线程尝试获取锁。</li>
+<li>如果锁空闲，直接尝试获取锁：
+<ul>
+<li>如果获取成功，线程继续执行。</li>
+<li>如果获取失败（例如被其他线程抢先），线程加入等待队列尾部。</li>
+</ul>
+</li>
+<li>如果锁被占用，线程直接加入等待队列尾部，等待被唤醒。</li>
+<li>当锁释放时，队列中的线程会被唤醒并尝试获取锁，但新来的线程也可以直接尝试获取锁，可能导致“插队”现象。</li>
+</ol>
+<hr>
+<h3 id="3-公平锁-vs-非公平锁的区别">3. <strong>公平锁 vs 非公平锁的区别</strong></h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>公平锁</th>
+<th>非公平锁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>获取锁的顺序</td>
+<td>严格按照等待队列的顺序（先到先得）</td>
+<td>允许插队，新线程可能直接获取锁</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>较低，因为需要维护队列顺序</td>
+<td>较高，减少了线程切换的开销</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>需要严格公平性的场景</td>
+<td>对性能要求较高的场景</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="4-代码示例">4. <strong>代码示例</strong></h3>
+<p>以下是使用 <code>ReentrantLock</code> 的公平锁和非公平锁的示例：</p>
+<pre><code class="language-java">import java.util.concurrent.locks.ReentrantLock;
+
+public class LockExample {
+    public static void main(String[] args) {
+        // 公平锁
+        ReentrantLock fairLock = new ReentrantLock(true);
+        // 非公平锁
+        ReentrantLock nonFairLock = new ReentrantLock(false);
+
+        Runnable task = () -&gt; {
+            fairLock.lock(); // 或 nonFairLock.lock()
+            try {
+                System.out.println(Thread.currentThread().getName() + &quot; 获取锁&quot;);
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                fairLock.unlock(); // 或 nonFairLock.unlock()
+                System.out.println(Thread.currentThread().getName() + &quot; 释放锁&quot;);
+            }
+        };
+
+        Thread t1 = new Thread(task, &quot;Thread-1&quot;);
+        Thread t2 = new Thread(task, &quot;Thread-2&quot;);
+        Thread t3 = new Thread(task, &quot;Thread-3&quot;);
+
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+</code></pre>
+<hr>
+<h3 id="5-总结">5. <strong>总结</strong></h3>
+<ul>
+<li><strong>公平锁</strong>：保证线程获取锁的顺序，但性能较低。</li>
+<li><strong>非公平锁</strong>：允许线程插队，性能较高，但可能导致某些线程长时间等待。</li>
+</ul>
+<p>根据具体场景选择合适的锁模式，可以更好地平衡公平性和性能。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[mysql 判断表字段是否存在,不存在则添加该字段]]></title>
+        <id>https://tangwan.github.io/post/mysql-pan-duan-biao-zi-duan-shi-fou-cun-zai-bu-cun-zai-ze-tian-jia-gai-zi-duan/</id>
+        <link href="https://tangwan.github.io/post/mysql-pan-duan-biao-zi-duan-shi-fou-cun-zai-bu-cun-zai-ze-tian-jia-gai-zi-duan/">
+        </link>
+        <updated>2024-09-03T08:27:04.000Z</updated>
+        <content type="html"><![CDATA[<p>需要使用存储过程来实现</p>
+<pre><code class="language-sql">-- 如果存在就删除该储存过程
+drop procedure if exists add_my_column;
+-- 编写储存过程需要修改语句结束符为$$（字符自定义）
+delimiter $$ 
+create procedure add_my_column()
+begin
+    if not exists(select *
+                  from information_schema.`COLUMNS`
+                  where table_schema = 'my_database'
+                    and TABLE_NAME = 'my_table'
+                    and COLUMN_NAME = 'xxx')
+    then
+        ALTER TABLE `my_table`
+            ADD COLUMN `xxx` bigint(12) DEFAULT NULL COMMENT 'xxx';
+    end if;
+end$$
+-- 储存过程语句完结后需要把分割符改回原来的分号
+delimiter ; 
+call add_my_column(); -- 执行储存过程
+drop procedure if exists add_my_column;-- 如果存在就删除该储存过程
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[istio模拟灰度发布]]></title>
+        <id>https://tangwan.github.io/post/istio-mo-ni-hui-du-fa-bu/</id>
+        <link href="https://tangwan.github.io/post/istio-mo-ni-hui-du-fa-bu/">
+        </link>
+        <updated>2023-09-14T09:24:27.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="istio功能简介">istio功能简介</h2>
+<p>Istio是一个开源的服务网格平台，用于管理和连接容器化应用程序的微服务。它提供了一系列功能，包括：</p>
+<ol>
+<li>
+<p>流量管理：Istio可以控制和路由应用程序的流量，实现灰度发布、A/B测试、故障恢复等功能。</p>
+</li>
+<li>
+<p>安全性：Istio提供了强大的安全功能，包括身份认证、授权、访问控制和加密通信，以保护应用程序的安全性。</p>
+</li>
+<li>
+<p>观察性：Istio可以收集和展示应用程序的运行时数据，如请求流量、延迟、错误率等，帮助开发人员进行故障排查和性能优化。</p>
+</li>
+<li>
+<p>策略和配额：Istio允许定义和实施各种策略和配额，如限制每秒请求数、设置访问控制规则等。</p>
+</li>
+<li>
+<p>故障注入和测试：Istio提供了故障注入的功能，可以模拟网络延迟、错误响应等情况，以测试应用程序的容错能力。</p>
+</li>
+</ol>
+<p>总之，Istio可以帮助开发人员更好地管理和监控微服务架构，提供更好的安全性、可观察性和流量控制能力。</p>
+<p>下面使用<a href="https://istio.io/latest/zh/docs/setup/getting-started/">官方文档</a>的例子做验证，所有资源文件部署在<code>default</code>namespace下</p>
+<h2 id="模拟部分流量管理功能">模拟部分流量管理功能</h2>
+<ol>
+<li>给命名空间添加标签</li>
+</ol>
+<pre><code class="language-shell"># 指示 Istio 在部署应用的时候，自动注入 Envoy 边车代理
+$ kubectl label namespace default istio-injection=enabled
+</code></pre>
+<ol start="2">
+<li>部署istio gateway，作为流量入口，一个k8s集群只需要一个网关</li>
+</ol>
+<p><code>bookinfo-gateway.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: bookinfo-gateway
+spec:
+  # The selector matches the ingress gateway pod labels.
+  # If you installed Istio using Helm following the standard documentation, this would be &quot;istio=ingress&quot;
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    #如果配置具体域名，需要通过域名访问，域名可在本机hosts配置，如果配置*则可用ip或域名访问
+    hosts:
+    - &quot;*&quot;
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: bookinfo
+spec:
+  hosts:
+  - &quot;*&quot;
+  gateways:
+  - bookinfo-gateway
+  http:
+  - match:
+    - uri:
+        exact: /productpage
+    - uri:
+        prefix: /static
+    - uri:
+        exact: /login
+    - uri:
+        exact: /logout
+    - uri:
+        prefix: /api/v1/products
+    route:
+    - destination:
+        host: productpage
+        port:
+          number: 9080
+
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f bookinfo-gateway.yaml
+</code></pre>
+<ol start="3">
+<li>部署bookinfo应用</li>
+</ol>
+<p><code>bookinfo.yaml</code></p>
+<pre><code class="language-yaml"># Copyright Istio Authors
+#
+#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.
+
+##################################################################################################
+# This file defines the services, service accounts, and deployments for the Bookinfo sample.
+#
+# To apply all 4 Bookinfo services, their corresponding service accounts, and deployments:
+#
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml
+#
+# Alternatively, you can deploy any resource separately:
+#
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l service=reviews # reviews Service
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l account=reviews # reviews ServiceAccount
+#   kubectl apply -f samples/bookinfo/platform/kube/bookinfo.yaml -l app=reviews,version=v3 # reviews-v3 Deployment
+##################################################################################################
+
+##################################################################################################
+# Details service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: details
+  labels:
+    app: details
+    service: details
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: details
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-details
+  labels:
+    account: details
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: details-v1
+  labels:
+    app: details
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: details
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: details
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-details
+      containers:
+      - name: details
+        image: docker.io/istio/examples-bookinfo-details-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+##################################################################################################
+# Ratings service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: ratings
+  labels:
+    app: ratings
+    service: ratings
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: ratings
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-ratings
+  labels:
+    account: ratings
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratings-v1
+  labels:
+    app: ratings
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ratings
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: ratings
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-ratings
+      containers:
+      - name: ratings
+        image: docker.io/istio/examples-bookinfo-ratings-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+---
+##################################################################################################
+# Reviews service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: reviews
+  labels:
+    app: reviews
+    service: reviews
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: reviews
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-reviews
+  labels:
+    account: reviews
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews-v1
+  labels:
+    app: reviews
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: reviews
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/istio/examples-bookinfo-reviews-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: &quot;/tmp/logs&quot;
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews-v2
+  labels:
+    app: reviews
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: reviews
+        version: v2
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/istio/examples-bookinfo-reviews-v2:1.18.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: &quot;/tmp/logs&quot;
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews-v3
+  labels:
+    app: reviews
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reviews
+      version: v3
+  template:
+    metadata:
+      labels:
+        app: reviews
+        version: v3
+    spec:
+      serviceAccountName: bookinfo-reviews
+      containers:
+      - name: reviews
+        image: docker.io/istio/examples-bookinfo-reviews-v3:1.18.0
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: LOG_DIR
+          value: &quot;/tmp/logs&quot;
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: wlp-output
+          mountPath: /opt/ibm/wlp/output
+      volumes:
+      - name: wlp-output
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
+---
+##################################################################################################
+# Productpage services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: productpage
+  labels:
+    app: productpage
+    service: productpage
+spec:
+  ports:
+  - port: 9080
+    name: http
+  selector:
+    app: productpage
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bookinfo-productpage
+  labels:
+    account: productpage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: productpage-v1
+  labels:
+    app: productpage
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: productpage
+      version: v1
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: &quot;true&quot;
+        prometheus.io/port: &quot;9080&quot;
+        prometheus.io/path: &quot;/metrics&quot;
+      labels:
+        app: productpage
+        version: v1
+    spec:
+      serviceAccountName: bookinfo-productpage
+      containers:
+      - name: productpage
+        image: docker.io/istio/examples-bookinfo-productpage-v1:1.18.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9080
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+---
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f bookinfo.yaml
+$ kubectl get pods
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://s2.loli.net/2023/09/14/rl9wKgMd1j64b7y.png" alt="iShot_2023-09-14_13.47.39.png" loading="lazy"></figure>
+<p>一个<code>productpage</code>前端和<code>details</code>、<code>ratings</code>、<code>reviews</code>后端接口服务，<code>reviews</code>部署了3个版本</p>
+<p>我们现在没有创建任何目标规则，一个请求从gateway--&gt;k8s service--&gt;POD，reviews三个版本<code>labels.app</code>相同，<br>
+默认每次请求<code>productpage</code>服务会轮训调用三个版本的<code>reviews</code></p>
+<pre><code class="language-shell"># 设置 EXTERNAL-IP 的值之后， 您的环境就有了一个外部的负载均衡器，
+# 可以将其用作入站网关。 但如果 EXTERNAL-IP 的值为 &lt;none&gt; (或者一直是 &lt;pending&gt; 状态)， 
+# 则您的环境则没有提供可作为入站流量网关的外部负载均衡器。 
+# 在这个情况下，您还可以用服务（Service）的节点端口访问网关。
+$ kubectl get svc istio-ingressgateway -n istio-system
+# 查看Service IP和应用端口
+$ kubectl get svc
+</code></pre>
+<p>我这里有<code>EXTERNAL-IP</code>我就用<code>http://${EXTERNAL-IP}/productpage</code>在浏览器访问，<br>
+否则就用<code>http://${CLUSTER-IP}:9080/productpage</code> (需要再集群任意一台机器上访问)</p>
+<figure data-type="image" tabindex="2"><img src="https://s2.loli.net/2023/09/14/aUrReouGtn3EyX2.png" alt="iShot_2023-09-14_14.11.03.png" loading="lazy"></figure>
+<p>红色框显示当前提供服务的是哪个版本的<code>reviews</code>，多次刷新发现会在 v1 v2 v3之间变化</p>
+<ol start="4">
+<li>设置每个版本的子集<code>subsets</code>，可以为不同版本指定不同的负载均衡算法</li>
+</ol>
+<p><code>distination-rule-reviews.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: reviews
+spec:
+  host: reviews
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+#    trafficPolicy:
+#      loadBalancer:
+#        simple: ROUND_ROBIN  
+  - name: v3
+    labels:
+      version: v3
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f distination-rule-reviews.yaml
+</code></pre>
+<ol start="5">
+<li>测试-reviews v2和v3版本各50%权重</li>
+</ol>
+<p><code>virtual-service-reviews-v2-v3.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 50
+    - destination:
+        host: reviews
+        subset: v3
+      weight: 50
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-v2-v3.yaml
+</code></pre>
+<p>浏览器多次刷新，发现右下角<code>reviews</code>版本在v2 v3之间切换，总体上权重维持1:1</p>
+<ol start="6">
+<li>测试-reviews v1和v2版本各权重90:10权重</li>
+</ol>
+<p><code>virtual-service-reviews-90-10.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v1
+      weight: 90
+    - destination:
+        host: reviews
+        subset: v2
+      weight: 10
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-90-10.yaml
+</code></pre>
+<p>浏览器多次刷新，发现右下角<code>reviews</code>版本在v1 v2之间切换，总体上权重维持9:1</p>
+<ol start="7">
+<li>测试-把权重全部给到v3</li>
+</ol>
+<p><code>virtual-service-reviews-v3.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+    - reviews
+  http:
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-v3.yaml
+</code></pre>
+<p>浏览器多次刷新，发现右下角<code>reviews</code>版本保持v3；经过上面5、6、7三个步骤我们就明白了如何控制灰度发布</p>
+<ol start="8">
+<li>测试-带有特征的流量转发</li>
+</ol>
+<p>有时为了验证新版本需要把带有指定特征的流量导入到新版本，无特征的流量继续访问老版本</p>
+<p><code>virtual-service-reviews-jason-v2-v3.yaml</code></p>
+<pre><code class="language-yaml">apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: reviews
+spec:
+  hosts:
+  - reviews
+  http:
+  - match:
+    - headers:
+        end-user:
+          exact: jason
+    route:
+    - destination:
+        host: reviews
+        subset: v2
+  - route:
+    - destination:
+        host: reviews
+        subset: v3
+</code></pre>
+<pre><code class="language-shell">$ kubectl apply -f virtual-service-reviews-jason-v2-v3.yaml
+</code></pre>
+<p>如果请求头带有<code>end-user:jason</code>，就把流量转到v2版本，否则流量转到v3，这里的<code>exact</code>代表全匹配模式，<br>
+还可以指定prefix、正则表达式等支持的匹配模式；此时我们多次刷新页面发现都是v3版本，我们在右上角登录<br>
+<code>jason</code>用户（密码可不填），再次刷新页面发现都是v2版本；通过查看<code>productpage</code>服务日志发现请求<code>reviews</code><br>
+接口带了<code>end-user:jason</code>请求头</p>
+<figure data-type="image" tabindex="3"><img src="https://s2.loli.net/2023/09/14/8rwcHiCQeR4dqmu.png" alt="iShot_2023-09-14_14.48.02.png" loading="lazy"></figure>
+<p>Istio中的&quot;match&quot;用于定义流量管理规则，以便对特定的请求进行匹配和操作。以下是一些常见的匹配模式：</p>
+<ol>
+<li>
+<p>URI匹配：可以基于请求的URI路径进行匹配，例如<code>/api/v1/users/*</code>。</p>
+</li>
+<li>
+<p>方法匹配：可以基于HTTP方法（GET、POST等）进行匹配。</p>
+</li>
+<li>
+<p>主机匹配：可以基于请求的主机名进行匹配，例如<code>example.com</code>。</p>
+</li>
+<li>
+<p>标头匹配：可以基于请求的标头进行匹配，例如<code>x-request-id=123456</code>。</p>
+</li>
+<li>
+<p>标签匹配：可以基于Kubernetes标签进行匹配，例如<code>version=v1</code>。</p>
+</li>
+<li>
+<p>端口匹配：可以基于请求的端口号进行匹配。</p>
+</li>
+</ol>
+<p>这些匹配模式可以组合使用，以创建更复杂的匹配规则。例如，可以使用URI匹配和方法匹配来仅匹配特定路径和HTTP方法的请求。Istio的匹配规则非常灵活，可以根据具体的需求进行定制。</p>
+<h2 id="应用部署方案">应用部署方案</h2>
+<figure data-type="image" tabindex="4"><img src="https://s2.loli.net/2023/09/14/Bt5JN9ilcG3Kx8M.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://s2.loli.net/2023/09/14/BYfaUVR7iHOl8n3.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Shell变量嵌套]]></title>
+        <id>https://tangwan.github.io/post/shell-bian-liang-qian-tao/</id>
+        <link href="https://tangwan.github.io/post/shell-bian-liang-qian-tao/">
+        </link>
+        <updated>2023-09-12T11:30:54.000Z</updated>
+        <content type="html"><![CDATA[<p>最近使用<code>gitlab</code>做<code>CI/CD</code>，需要根据当前分支获取不同环境的<code>harbor</code>镜像仓库，当前分支有<code>dev</code>、<code>test</code>、<code>pre</code>、<code>master</code><br>
+，分支和gitlab变量指向如下：</p>
+<table>
+<thead>
+<tr>
+<th>分支</th>
+<th>gitlab变量</th>
+<th>gitlab 变量值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dev</td>
+<td>CI_DEV_REGISTRY</td>
+<td>https://dev-harbor.xxx.com</td>
+</tr>
+<tr>
+<td>test</td>
+<td>CI_TEST_REGISTRY</td>
+<td>https://test-harbor.xxx.com</td>
+</tr>
+<tr>
+<td>pre</td>
+<td>CI_PRE_REGISTRY</td>
+<td>https://pre-harbor.xxx.com</td>
+</tr>
+<tr>
+<td>master</td>
+<td>CI_PROD_REGISTRY</td>
+<td>https://prod-harbor.xxx.com</td>
+</tr>
+</tbody>
+</table>
+<p>示例代码:</p>
+<pre><code class="language-shell"># 默认变量
+BRANCH=master
+# 自定义变量
+CI_DEV_REGISTRY=https://dev-harbor.xxx.com
+CI_PROD_REGISTRY=https://prod-harbor.xxx.com
+
+# 转大写(2中方式都可以)
+ENV=`echo ${BRANCH} | tr '[:lower:]' '[:upper:]'`
+#ENV=`echo $BRANCH | tr 'a-z' 'A-Z'`
+if [ &quot;$BRANCH&quot;x = &quot;master&quot;x ]; then
+  ENV=PROD
+fi
+
+REGISTRY=`eval echo '$'&quot;CI_${ENV}_REGISTRY&quot;`
+
+echo $REGISTRY
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Redisson有哪些锁]]></title>
+        <id>https://tangwan.github.io/post/redisson-you-na-xie-suo/</id>
+        <link href="https://tangwan.github.io/post/redisson-you-na-xie-suo/">
+        </link>
+        <updated>2023-08-16T15:03:36.000Z</updated>
+        <content type="html"><![CDATA[<p>Redisson 是一个基于 Redis 的分布式 Java 对象和服务的框架，在 Redisson 中提供了多种类型的锁来实现分布式锁的功能。以下是<br>
+Redisson 提供的几种主要的锁类型：</p>
+<ol>
+<li>
+<p>可重入锁（ReentrantLock）：与 Java 的 ReentrantLock 类似，支持可重入特性。即同一个线程可以多次获得该锁，并且需要释放相同次数才能完全释放锁。</p>
+</li>
+<li>
+<p>公平锁（FairLock）：可重入锁的变体，实现了公平性。当多个请求获取锁时，按照请求的顺序进行排队，保证先请求的先获取锁。</p>
+</li>
+<li>
+<p>读写锁（ReadWriteLock）：与 Java 的 ReadWriteLock 类似，支持读写分离。多个线程可以同时获取读锁，但只有一个线程可以获取写锁。</p>
+</li>
+<li>
+<p>联锁（MultiLock）：同时获取多个锁对象，只有当所有锁都成功获取时，才算获取成功。类似于数据库事务中的行锁。</p>
+</li>
+<li>
+<p>红锁（RedLock）：在分布式环境中实现的一种基于 Redis 的互斥锁算法。通过在不同的 Redis 节点上设置互斥锁，通过多数节点达成共识来获取锁。</p>
+</li>
+<li>
+<p>信号量（Semaphore）：控制同时访问某个资源的线程数量。可以用于实现限流策略。</p>
+</li>
+<li>
+<p>可过期性信号量（PermitExpirableSemaphore）: Redisson的可过期性信号量（PermitExpirableSemaphore）实在RSemaphore对象的基础上，为每个信号增加了一个过期时间。每个信号可以通过独立的ID来辨识，释放时只能通过提交这个ID才能释放。</p>
+</li>
+<li>
+<p>闭锁（CountDownLatch）: Redisson的分布式闭锁（CountDownLatch）Java对象RCountDownLatch采用了与java.util.concurrent.CountDownLatch相似的接口和用法。</p>
+</li>
+</ol>
+<p>以上是 Redisson 提供的几种常见的锁类型，每种锁都有不同的应用场景和特点，可以根据具体的需求选择适合的锁类型来实现分布式锁。此外，Redisson<br>
+还提供了其他功能强大的分布式对象和服务，如分布式集合、分布式 Map、分布式任务等。</p>
+<h2 id="参考">参考：</h2>
+<blockquote>
+<p><a href="https://blog.csdn.net/a184477587/article/details/114454415">Redisson 几种锁</a></p>
+</blockquote>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Java元数据空间存储的是什么]]></title>
+        <id>https://tangwan.github.io/post/java-yuan-shu-ju-kong-jian-cun-chu-de-shi-shi-me/</id>
+        <link href="https://tangwan.github.io/post/java-yuan-shu-ju-kong-jian-cun-chu-de-shi-shi-me/">
+        </link>
+        <updated>2023-08-16T08:31:17.000Z</updated>
+        <content type="html"><![CDATA[<p>在 Java 中，元数据空间（Metaspace）存储的是类的元数据信息。元数据指的是描述类结构、方法、字段等信息的数据。</p>
+<p>在传统的 Java 虚拟机（JVM）中，类的元数据信息通常存储在永久代（PermGen）中。但是，自从 JDK 8 开始，永久代被元数据空间取代。元数据空间是一块由操作系统管理的本地内存区域，它不再受到虚拟机的堆内存限制，并且可以动态地调整大小。</p>
+<p>元数据空间存储的内容包括：</p>
+<ol>
+<li>
+<p>类的结构信息：包括类的名称、父类、接口、字段、方法等。</p>
+</li>
+<li>
+<p>字节码：即类的编译后的字节码指令，用于在虚拟机中执行。</p>
+</li>
+<li>
+<p>静态变量：静态变量属于类级别的变量，在元数据空间中存储静态变量的初始值和引用。</p>
+</li>
+<li>
+<p>符号引用：类的符号引用指向类的符号地址，用于在运行时解析成直接引用。</p>
+</li>
+<li>
+<p>注解信息：类、方法、字段上的注解信息，用于提供额外的元数据。</p>
+</li>
+<li>
+<p>定义的枚举类型：枚举类型及其成员在元数据空间中进行存储。</p>
+</li>
+</ol>
+<p>通过将类的元数据信息存储在元数据空间中，Java 虚拟机可以更加灵活地管理和调整类的元数据大小，提高系统的稳定性和可扩展性。同时，元数据空间的引入也使得开发者可以更好地管理和控制类的元数据信息，例如通过 JVM 参数来调整元数据空间的大小。</p>
+<p>需要注意的是，具体的元数据存储方式和实现可能因不同的 Java 虚拟机实现而有所差异。以上内容是一般情况下元数据空间的存储内容。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL 执行一条 SQL 语句的流程]]></title>
+        <id>https://tangwan.github.io/post/mysql-zhi-xing-yi-tiao-sql-yu-ju-de-liu-cheng/</id>
+        <link href="https://tangwan.github.io/post/mysql-zhi-xing-yi-tiao-sql-yu-ju-de-liu-cheng/">
+        </link>
+        <updated>2023-08-16T08:17:14.000Z</updated>
+        <content type="html"><![CDATA[<p>MySQL 执行一条 SQL 语句的流程主要包括以下几个步骤：</p>
+<ol>
+<li>
+<p>语法分析（Parsing）：MySQL 对输入的 SQL 语句进行语法分析，检查语句是否符合语法规则，并将其转换为内部数据结构。</p>
+</li>
+<li>
+<p>词法分析（Lexical Analysis）：MySQL 对语句进行词法分析，将 SQL 语句按照关键字、标识符、运算符等进行划分，形成一个词法单元序列。</p>
+</li>
+<li>
+<p>查询优化器（Query Optimization）：MySQL 使用查询优化器分析 SQL 语句，根据统计信息和索引等优化策略生成多个可能的执行计划，并估算每个执行计划的成本，选择最优的执行计划。</p>
+</li>
+<li>
+<p>执行计划生成（Execution Plan Generation）：MySQL 根据查询优化器的选择，生成实际的执行计划（Execution Plan），包括确定表的连接顺序、使用索引的方式、选择合适的算法等。</p>
+</li>
+<li>
+<p>执行计划执行（Execution）：MySQL 执行生成的执行计划，从存储引擎中读取数据，进行排序、聚合、连接等操作，生成最终的结果集。</p>
+</li>
+<li>
+<p>结果返回（Result Return）：MySQL 将执行得到的结果返回给客户端，完成整个 SQL 语句的执行过程。</p>
+</li>
+</ol>
+<p>需要注意的是，MySQL 的执行流程是一个高度复杂的过程，其中涉及到多个组件和算法的配合工作，以及对表结构、索引、统计信息等的综合考虑。此外，MySQL 还会对一些常用的 SQL 语句进行缓存，以提高执行效率。具体的执行流程会根据实际情况和 MySQL 版本的不同而有所差异。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL的MVCC]]></title>
+        <id>https://tangwan.github.io/post/mysql-de-mvcc/</id>
+        <link href="https://tangwan.github.io/post/mysql-de-mvcc/">
+        </link>
+        <updated>2023-08-08T06:32:44.000Z</updated>
+        <content type="html"><![CDATA[<p>MySQL的MVCC（多版本并发控制）是一种用于处理并发读写操作的机制。它允许多个事务同时读取数据库的一致性视图，而不会相互干扰或产生冲突。</p>
+<p>MVCC的原理可以简单地描述为以下几个要点：</p>
+<ol>
+<li>每行数据都有一个版本号：在更新数据时，MySQL会为每一行数据分配一个唯一的版本号。这个版本号用于标识数据的修改历史。</li>
+<li>读取操作使用快照：当一个事务开始时，它会创建一个快照，记录当前数据库的状态。这个快照包含了事务开始时的所有数据版本号。</li>
+<li>读取操作不会阻塞写入操作：当一个事务在读取数据时，即使其他事务正在修改同一行数据，也不会发生阻塞。读取操作会使用快照来获取一致性的数据视图。</li>
+<li>写入操作使用行级锁：当一个事务开始修改数据时，MySQL会为相关的行加上行级锁，防止其他事务同时修改同一行数据。这样可以保证数据的一致性和并发性。</li>
+<li>事务的隔离级别影响MVCC：MySQL的事务隔离级别（如读未提交、读已提交、可重复读、串行化）会影响MVCC的行为。不同的隔离级别会决定事务能够看到的数据版本范围。</li>
+</ol>
+<p>通过MVCC机制，MySQL能够在高并发的情况下提供读写操作的并发性和一致性。它允许事务读取一致性的数据视图，而不会被其他事务的并发修改所干扰。这种机制对于处理并发访问数据库的应用程序非常重要。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[清理Mac鼠标右键打开方式中的重复项]]></title>
+        <id>https://tangwan.github.io/post/qing-li-mac-shu-biao-you-jian-da-kai-fang-shi-zhong-de-chong-fu-xiang/</id>
+        <link href="https://tangwan.github.io/post/qing-li-mac-shu-biao-you-jian-da-kai-fang-shi-zhong-de-chong-fu-xiang/">
+        </link>
+        <updated>2023-08-02T05:56:08.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="问题简介">问题简介</h2>
+<p>Edge浏览器升级后，鼠标右键的打开方式中出现了2个Edge，两个图标后面跟了小版本号，但其实电脑只有一个Edge浏览器，其实是打开同一个浏览器。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>这个问题目前很常见，想要解决这个问题也很简单，只需要一段终端命令，重建该列表就行了。<br>
+打开OS X自带的【终端】(可用Spotlight搜索找到)，复制粘贴以下命令并回车：</p>
+<pre><code class="language-shell">/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user;killall Finder;echo “Open With has been rebuilt, Finder will relaunch
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[使用jdk8请求https的url报错PKIX path building failed]]></title>
+        <id>https://tangwan.github.io/post/shi-yong-jdk8-qing-qiu-https-de-url-bao-cuo-pkix-path-building-failed/</id>
+        <link href="https://tangwan.github.io/post/shi-yong-jdk8-qing-qiu-https-de-url-bao-cuo-pkix-path-building-failed/">
+        </link>
+        <updated>2023-08-01T05:50:56.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="报错内容">报错内容</h2>
+<pre><code class="language-java">javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification pa
+th to requested target
+at sun.security.ssl.Alert.createSSLException(Alert.java:131)
+at sun.security.ssl.TransportContext.fatal(TransportContext.java:370)
+at sun.security.ssl.TransportContext.fatal(TransportContext.java:313)
+at sun.security.ssl.TransportContext.fatal(TransportContext.java:308)
+at sun.security.ssl.CertificateMessage$T12CertificateConsumer.checkServerCerts(CertificateMessage.java:652)
+at sun.security.ssl.CertificateMessage$T12CertificateConsumer.onCertificate(CertificateMessage.java:471)
+at sun.security.ssl.CertificateMessage$T12CertificateConsumer.consume(CertificateMessage.java:367)
+at sun.security.ssl.SSLHandshake.consume(SSLHandshake.java:376)
+at sun.security.ssl.HandshakeContext.dispatch(HandshakeContext.java:479)
+at sun.security.ssl.HandshakeContext.dispatch(HandshakeContext.java:457)
+at sun.security.ssl.TransportContext.dispatch(TransportContext.java:200)
+at sun.security.ssl.SSLTransport.decode(SSLTransport.java:155)
+at sun.security.ssl.SSLSocketImpl.decode(SSLSocketImpl.java:1320)
+at sun.security.ssl.SSLSocketImpl.readHandshakeRecord(SSLSocketImpl.java:1233)
+at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:417)
+at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:389)
+at sun.net.www.protocol.https.HttpsClient.afterConnect(HttpsClient.java:558)
+at sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:201)
+at sun.net.www.protocol.https.HttpsURLConnectionImpl.connect(HttpsURLConnectionImpl.java:167)
+at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:732)
+at org.jsoup.helper.HttpConnection$Response.execute(HttpConnection.java:707)
+at org.jsoup.helper.HttpConnection.execute(HttpConnection.java:297)
+at org.jsoup.helper.HttpConnection.get(HttpConnection.java:286)
+at com.duliday.spider.service.impl.AdministrativeDivisionManager.export(AdministrativeDivisionManager.java:50)
+at com.duliday.spider.service.impl.AdministrativeDivisionManager$$FastClassBySpringCGLIB$$23edeb39.invoke(&lt;generated&gt;)
+at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:771)
+at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:367)
+at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:118)
+at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:691)
+at com.duliday.spider.service.impl.AdministrativeDivisionManager$$EnhancerBySpringCGLIB$$d74be86b.export(&lt;generated&gt;)
+at com.duliday.spider.controller.AdministrativeDivisionController.export(AdministrativeDivisionController.java:29)
+at com.duliday.spider.controller.AdministrativeDivisionController$$FastClassBySpringCGLIB$$9094180d.invoke(&lt;generated&gt;)
+at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:771)
+at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+at org.springframework.aop.aspectj.AspectJAfterThrowingAdvice.invoke(AspectJAfterThrowingAdvice.java:62)
+at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:88)
+at com.duliday.common.advice.RequestLogAdvice.around(RequestLogAdvice.java:42)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.lang.reflect.Method.invoke(Method.java:498)
+at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:644)
+at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:633)
+at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:70)
+at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:95)
+at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:691)
+at com.duliday.spider.controller.AdministrativeDivisionController$$EnhancerBySpringCGLIB$$a8ae852f.export(&lt;generated&gt;)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.lang.reflect.Method.invoke(Method.java:498)
+at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:190)
+at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:138)
+at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:105)
+at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:878)
+at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:792)
+at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1040)
+at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:943)
+at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+at javax.servlet.http.HttpServlet.service(HttpServlet.java:626)
+at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+at javax.servlet.http.HttpServlet.service(HttpServlet.java:733)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+at com.duliday.common.advice.CrossFilter.doFilter(CrossFilter.java:30)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:93)
+at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
+at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202)
+at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
+at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:139)
+at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:373)
+at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1589)
+at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+at java.lang.Thread.run(Thread.java:750)
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:439)
+at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:306)
+at sun.security.validator.Validator.validate(Validator.java:271)
+at sun.security.ssl.X509TrustManagerImpl.validate(X509TrustManagerImpl.java:312)
+at sun.security.ssl.X509TrustManagerImpl.checkTrusted(X509TrustManagerImpl.java:221)
+at sun.security.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:128)
+at sun.security.ssl.CertificateMessage$T12CertificateConsumer.checkServerCerts(CertificateMessage.java:636)
+... 112 common frames omitted
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+at sun.security.provider.certpath.SunCertPathBuilder.build(SunCertPathBuilder.java:141)
+at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:126)
+at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:280)
+at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:434)
+... 118 common frames omitted
+</code></pre>
+<h2 id="mac下解决办法">Mac下解决办法</h2>
+<ol>
+<li>Chrome下载网站的证书</li>
+<li>使用命令导入证书</li>
+<li>重启IDEA、重启应用</li>
+</ol>
+<pre><code class="language-shell">sudo keytool -import -trustcacerts -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_361.jdk/Contents/Home/jre/lib/security/cacerts -storepass changeit -noprompt -alias xxxcert -file ~/Downloads/xxx.cer
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://s2.loli.net/2023/08/11/Dwtn14EqZrY5FHM.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+</feed>

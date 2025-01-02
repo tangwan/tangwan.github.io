@@ -1,0 +1,360 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>MySQL安装配置 | Devin&#39;s Blog</title>
+
+<link rel="shortcut icon" href="https://tangwan.github.io/favicon.ico?v=1735789697463">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://tangwan.github.io/styles/main.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"> -->
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.12.0/languages//dart.min.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script> -->
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131285531-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-131285531-1');
+</script>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+    
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@9.1.1/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script> 
+    
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="/">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Devin&#39;s Blog
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" id="changeNavbar">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+            <div class="nav-item">
+                
+                <a href="/" class="menu gt-a-link">
+                    首页
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/archives" class="menu gt-a-link">
+                    归档
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/tags" class="menu gt-a-link">
+                    标签
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/post/about" class="menu gt-a-link">
+                    关于
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="/friends" class="menu gt-a-link">
+                    友链
+                </a>
+                
+            </div>
+            
+            <div class="nav-item">
+                
+                <a href="https://support.qq.com/product/65062" class="menu gt-a-link" target="_blank">
+                    留言
+                </a>
+                
+            </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1735789697463"
+                action="/search/">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+<script>
+    /* 移动端导航栏展开/收起切换 */
+    document.getElementById('changeNavbar').onclick = () => {
+        var element = document.getElementById('navbarSupportedContent');
+        if (element.style.display === 'none' || element.style.display === '') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    MySQL安装配置
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2021-08-02 ·
+                    </time>
+                    
+                        <a href="https://tangwan.github.io/tag/8g-ItOdkCh/" class="post-tags">
+                            # db
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="下载mysql安装包">下载MySQL安装包</h2>
+<p>官网最新版下载地址</p>
+<p>https://dev.mysql.com/downloads/mysql/</p>
+<p>官网历史稳定版下载地址</p>
+<p>https://downloads.mysql.com/archives/community/</p>
+<figure data-type="image" tabindex="1"><img src="https://s2.loli.net/2023/08/11/yAfdmHgDSZo5vRW.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://s2.loli.net/2023/08/11/hKxoCzXIA7YpEHZ.png" alt="" loading="lazy"></figure>
+<p>选择对应的系统和版本安装包下载即可</p>
+<h2 id="安装">安装</h2>
+<h3 id="windows">Windows</h3>
+<p>如果下载的是<code>.exe</code>或<code>.msi</code>文件,双击安装,下一步--&gt;下一步即可,把MySQL安装未系统服务,在服务管理界面设置开机启动即可.</p>
+<p>如果下载的是压缩包,使用解压缩软件解压,然后把解压的文件夹移动到自己想放的目录(避免放在中文文件夹下面),然后执行下面命令添加为系统服务</p>
+<pre><code class="language-cmd">cmd&gt; mysqld --install  Mysql5.6        #将mysql安装到服务列表,Mysql5.6为服务名称,随意取名
+cmd&gt; net start mysql5.6                #启动服务
+cmd&gt; mysql -uroot -h 127.0.0.1 -p      #尝试连接mysql
+cmd&gt; mysqld --remove Mysql5.6          #删除mysql服务
+cmd&gt; net stop mysql5.6                 #停止服务
+cmd&gt; mysqld --install-manual           #改为手动启动服务
+</code></pre>
+<h3 id="mac">Mac</h3>
+<pre><code class="language-shell">$ brew update                         
+$ brew search mysql
+$ brew install mysql@5.6
+# mysql加入到path,本机就可以
+$ vim ~/.bash_profile
+        export PATH=&quot;/usr/local/opt/mysql@5.6/bin:$PATH&quot;
+$ source ~/.bash_profile
+</code></pre>
+<h3 id="linux">Linux</h3>
+<ol>
+<li><code>yum</code>或<code>apt-get</code>配置正确的国内yum源或apt-get下载源,直接安装,遇到问题谷歌百度搜一下这里不再介绍</li>
+<li>安装<code>MySQL.xxx.tar.gz</code></li>
+</ol>
+<h3 id="docker">docker</h3>
+<p>首先自行安装docker和docker-compose</p>
+<p>使用docker-compose用官方mysql镜像来启动一个mysql容器</p>
+<p>具体mysql官方有哪些镜像标签,到这里去看 <a href="https://hub.docker.com/_/mysql">https://hub.docker.com/_/mysql</a></p>
+<pre><code class="language-yaml">version: &quot;3&quot;
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql5.7
+    restart: always
+    ports:
+    - 3306:3306
+    volumes:
+    # 把宿主机目录挂载到mysql data目录,持久化数据数据,容器重启或重建数据不丢失
+    - /data/mysql/db_data:/var/lib/mysql
+    # 把自己的my.cnf配置文件放到挂载的宿主机目录可以替换掉默认的配置
+    - /data/mysql/config:/etc/mysql/conf.d:ro
+    environment:
+    #默认只能创建一个库,如果想在一个容器创建多个数据库需要修改官方Dockerfile重新build镜像,比较麻烦,还是启动后自己用SQL来建库比较方便
+    - MYSQL_DATABASE=mydb
+    # 指定一个普通用户和密码
+    - MYSQL_USER=test
+    - MYSQL_PASSWORD=123456
+    # 设置root密码
+    - MYSQL_ROOT_PASSWORD=654321
+</code></pre>
+<p>我的<code>my.cnf</code>配置文件</p>
+<pre><code class="language-editorconfig">#修改MySQL服务器编码utf8mb4
+[mysqld]
+character-set-server=utf8mb4
+collation-server=utf8mb4_general_ci
+init-connect='SET NAMES utf8'
+#区分大小写(默认区分),最好别修改默认值
+#unix下lower_case_table_names默认值为0 ,Windows下默认值是1 ,Mac OS X下默认值是2
+#lower_case_table_names=2
+###############################MySQL 服务器 my.cnf优化配置#################################
+##开启慢查询1.开启,0.关闭
+slow_query_log=1
+#查询时间300ms以上的会记录到文件
+long_query_time=0.3
+#慢查询日志记录位置
+slow-query-log-file=/var/log/mysql/slow.log
+#记录未用到索引的查询
+log-queries-not-using-indexes
+#慢查询日志存储方式,默认FILE,可以只是用一个,也可都使用,存储在mysql.slow_log表中
+log_output='FILE,TABLE'
+#不再进行反解析（ip不反解成域名），这样可以加快数据库的反应时间。
+skip-name-resolve
+#跳过授权,可用来重置root密码
+#skip-grant-tables
+#最大连接数
+max_connections=1000
+#MySQL的连接数据达到 max_connections时,新来的请求将会被存在堆栈中,堆栈保存连接请求数量
+back_log=256
+#服务器关闭非交互连接之前等待活动的秒数.默认28800秒（8小时);改为24小时
+wait_timeout=86400
+#服务器关闭交互式连接前等待活动的秒数。参数默认值：28800秒（8小时）;改为24小时
+interactive_timeout=86400
+#指定索引缓冲区的大小,默认4M;修改为256M
+key_buffer_size=268435456
+#随机读缓冲区大小,设置为16M
+read_rnd_buffer_size=16773120
+#每个需要进行排序的线程分配该大小的一个缓冲区;默认数值是2097144(2M)，可改为16777208 (16M)
+sort_buffer_size=16777208
+#联合查询操作所能使用的缓冲区大小
+join_buffer_size=16777208
+#通过设置tmp_table_size选项来增加一张临时表的大小
+tmp_table_size=128M
+#可以复用的保存在中的线程的数量
+thread_cache_size=80
+#推荐设置为服务器 CPU核数的2倍
+thread_concurrency=20
+#InnoDB使用该参数指定大小的内存来缓冲数据和索引
+innodb_buffer_pool_size=1G
+innodb_file_io_threads=4
+#log缓存大小，一般为1-8M，默认为1M，对于较大的事务，可以增大缓存大小。
+innodb_log_buffer_size=8M
+##存放文件大小限制
+max_allowed_packet = 16M
+##########################EOF################################################################
+[mysql]
+default-character-set=utf8mb4
+[client]
+default-character-set=utf8mb4
+</code></pre>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://tangwan.github.io/post/kubernetes-chang-yong-ming-ling/" class="post-title gt-a-link">
+                    kubernetes常用命令
+                </a>
+            </div>
+        
+
+        
+            <span id="/post/mysql-an-zhuang-pei-zhi/" class="leancloud_visitors" data-flag-title="MySQL安装配置">
+                <em class="post-meta-item-text">阅读量 </em>
+                <i class="leancloud-visitors-count">0</i>
+            </span>
+        
+
+        
+
+        
+            <script src='https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js'></script>
+
+<style>
+	div#vcomments{
+		width:100%;
+		max-width: 1000px;
+		padding: 2.5%
+	}
+</style>
+
+
+	<div id="vcomments"></div>
+
+<script>
+	new Valine({
+		el: '#vcomments',
+		appId: 'ebD25vv6zg7Y33bkd2u04EhA-gzGzoHsz',
+		appKey: 'PtLdgaMXGHXjxsvfz4H3qpvi',
+		avatar: '',
+		pageSize: 5,
+		recordIp: true,
+		placeholder: '如有疑问，请在这里留言',
+		visitor: true,
+	});
+</script>
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">博采众长才能相互印证，故步自封必将粗陋浅薄。</div>
+    <div class="social-container">
+        
+            
+                <a href="https://github.com/tangwan" target="_blank">
+                    <i class="fab fa-github gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+                <a href="https://twitter.com/_tangwan" target="_blank">
+                    <i class="fab fa-twitter gt-c-content-color-first"></i>
+                </a>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        
+    </div>
+    <div>
+        Theme <a href="https://github.com/imhanjie/gridea-theme-pure" target="_blank">Pure</a>, Powered by <a
+                href="https://gridea.dev" target="_blank">Gridea</a> | <a href="https://tangwan.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+</div>
+
+<script>
+  hljs.highlightAll()
+</script>
+
+    </div>
+</div>
+</body>
+</html>
